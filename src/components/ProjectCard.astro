@@ -22,107 +22,34 @@ const dotColor = languageColors[project.language] ?? '#8b949e';
 const titleUrl = project.repoUrl ?? project.demoUrl;
 ---
 
-<article class="repo-card box">
-  <div class="repo-title">
-    <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+<article class="box flex flex-col gap-2 p-4">
+  <div class="flex items-center gap-2 text-sm">
+    <svg class="shrink-0 fill-muted" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
       <path d="M3 2.5A1.5 1.5 0 0 1 4.5 1h8a.5.5 0 0 1 .5.5v11a.5.5 0 0 1-.5.5H5v1h7.5a.5.5 0 0 1 0 1h-8A1.5 1.5 0 0 1 3 13.5Zm1.5-.5a.5.5 0 0 0-.5.5v10.6c.2-.1.3-.1.5-.1H12V2Z"/>
     </svg>
     {titleUrl ? (
-      <a href={titleUrl} target="_blank" rel="noopener noreferrer">{project.title}</a>
+      <a class="font-semibold" href={titleUrl} target="_blank" rel="noopener noreferrer">{project.title}</a>
     ) : (
-      <span class="repo-name">{project.title}</span>
+      <span class="font-semibold">{project.title}</span>
     )}
-    <span class="visibility">Public</span>
+    <span class="rounded-full border border-line px-[7px] text-xs leading-[18px] text-muted">Public</span>
   </div>
-  <p class="repo-desc">{project.description}</p>
-  <ul class="topics">
+  <p class="flex-1 text-xs text-muted">{project.description}</p>
+  <ul class="flex flex-wrap gap-1">
     {project.tags.map((tag) => (
       <li class="topic">{tag}</li>
     ))}
   </ul>
-  <div class="repo-meta">
-    <span class="lang">
-      <span class="lang-dot" style={`background:${dotColor}`} aria-hidden="true"></span>
+  <div class="flex items-center gap-4 text-xs text-muted">
+    <span class="inline-flex items-center gap-[5px]">
+      <span class="inline-block h-2.5 w-2.5 rounded-full" style={`background:${dotColor}`} aria-hidden="true"></span>
       {project.language}
     </span>
     {project.demoUrl && (
-      <a href={project.demoUrl} target="_blank" rel="noopener noreferrer">Live demo</a>
+      <a class="font-medium" href={project.demoUrl} target="_blank" rel="noopener noreferrer">Live demo</a>
     )}
     {project.repoUrl && (
-      <a href={project.repoUrl} target="_blank" rel="noopener noreferrer">Source</a>
+      <a class="font-medium" href={project.repoUrl} target="_blank" rel="noopener noreferrer">Source</a>
     )}
   </div>
 </article>
-
-<style>
-  .repo-card {
-    padding: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .repo-title {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 14px;
-  }
-
-  .repo-title svg {
-    fill: var(--fg-muted);
-    flex-shrink: 0;
-  }
-
-  .repo-title a,
-  .repo-name {
-    font-weight: 600;
-  }
-
-  .visibility {
-    font-size: 12px;
-    color: var(--fg-muted);
-    border: 1px solid var(--border);
-    border-radius: 2em;
-    padding: 0 7px;
-    line-height: 18px;
-  }
-
-  .repo-desc {
-    font-size: 12px;
-    color: var(--fg-muted);
-    flex: 1;
-  }
-
-  .topics {
-    list-style: none;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
-  }
-
-  .repo-meta {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    font-size: 12px;
-    color: var(--fg-muted);
-  }
-
-  .repo-meta a {
-    font-weight: 500;
-  }
-
-  .lang {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-  }
-
-  .lang-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    display: inline-block;
-  }
-</style>

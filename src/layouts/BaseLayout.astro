@@ -37,17 +37,28 @@ const base = import.meta.env.BASE_URL;
     <link rel="canonical" href={Astro.site ? new URL(base, Astro.site).href : base} />
   </head>
   <body>
-    <header class="site-header">
-      <div class="container header-inner">
-        <a href={base} class="brand">
-          <span class="brand-avatar" aria-hidden="true">{site.name.charAt(0)}</span>
-          <span class="brand-name">{site.handle}</span>
+    <header class="sticky top-0 z-10 border-b border-line bg-canvas-subtle">
+      <div class="mx-auto flex max-w-[1216px] items-center justify-between px-4 py-3">
+        <a
+          href={base}
+          class="inline-flex items-center gap-2 text-sm font-semibold text-fg hover:text-accent hover:no-underline"
+        >
+          <span
+            class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-linear-to-br from-btn-green to-accent text-xs font-bold text-white"
+            aria-hidden="true">{site.name.charAt(0)}</span
+          >
+          <span>{site.handle}</span>
         </a>
-        <span class="header-note">portfolio</span>
+        <span class="font-mono text-xs text-muted">portfolio</span>
       </div>
-      <nav class="container tab-nav" aria-label="Profile sections">
+      <nav class="mx-auto flex max-w-[1216px] gap-2 overflow-x-auto px-4" aria-label="Profile sections">
         {tabs.map((tab, index) => (
-          <a href={tab.href} class="tab" data-tab aria-current={index === 0 ? 'page' : undefined}>
+          <a
+            href={tab.href}
+            class="whitespace-nowrap border-b-2 border-transparent px-3 pb-2.5 pt-2 text-sm leading-[23px] text-fg hover:border-line hover:no-underline aria-[current=page]:border-tab-active aria-[current=page]:font-semibold"
+            data-tab
+            aria-current={index === 0 ? 'page' : undefined}
+          >
             {tab.label}
           </a>
         ))}
@@ -58,10 +69,10 @@ const base = import.meta.env.BASE_URL;
       <slot />
     </main>
 
-    <footer class="site-footer">
-      <div class="container footer-inner">
+    <footer class="mt-10 border-t border-line py-6">
+      <div class="mx-auto flex max-w-[1216px] flex-wrap justify-between gap-2 px-4 text-xs text-muted">
         <p>© {new Date().getFullYear()} {site.name}</p>
-        <p>Built with Astro · Inspired by the GitHub profile layout</p>
+        <p>Built with Astro + Tailwind CSS · Inspired by the GitHub profile layout</p>
       </div>
     </footer>
 
@@ -99,93 +110,3 @@ const base = import.meta.env.BASE_URL;
     </script>
   </body>
 </html>
-
-<style>
-  .site-header {
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    background: var(--canvas-subtle);
-    border-bottom: 1px solid var(--border);
-  }
-
-  .header-inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-block: 12px;
-  }
-
-  .brand {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    color: var(--fg);
-    font-weight: 600;
-    font-size: 14px;
-  }
-
-  .brand:hover {
-    text-decoration: none;
-    color: var(--accent);
-  }
-
-  .brand-avatar {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #1f883d, #0969da);
-    color: #fff;
-    font-size: 12px;
-    font-weight: 700;
-  }
-
-  .header-note {
-    font-size: 12px;
-    color: var(--fg-muted);
-    font-family: var(--font-mono);
-  }
-
-  .tab-nav {
-    display: flex;
-    gap: 8px;
-    overflow-x: auto;
-  }
-
-  .tab {
-    padding: 8px 12px 10px;
-    color: var(--fg);
-    font-size: 14px;
-    line-height: 23px;
-    border-bottom: 2px solid transparent;
-    white-space: nowrap;
-  }
-
-  .tab:hover {
-    text-decoration: none;
-    border-bottom-color: var(--border);
-  }
-
-  .tab[aria-current='page'] {
-    font-weight: 600;
-    border-bottom-color: var(--tab-active);
-  }
-
-  .site-footer {
-    border-top: 1px solid var(--border);
-    margin-top: 40px;
-    padding-block: 24px;
-  }
-
-  .footer-inner {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 8px;
-    color: var(--fg-muted);
-    font-size: 12px;
-  }
-</style>

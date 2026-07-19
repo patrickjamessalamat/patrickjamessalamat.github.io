@@ -5,15 +5,7 @@ import ProjectCard from './ProjectCard.astro';
 
 <section id="projects">
   <h2 class="section-heading">Pinned</h2>
-  <div class="grid">
+  <div class="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-4">
     {projects.map((project) => <ProjectCard project={project} />)}
   </div>
 </section>
-
-<style>
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 16px;
-  }
-</style>

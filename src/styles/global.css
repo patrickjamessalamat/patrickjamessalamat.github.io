@@ -1,43 +1,42 @@
-/* GitHub Primer-inspired design tokens */
+@import 'tailwindcss';
+
+/* GitHub Primer color tokens. The raw values flip with the system color
+   scheme; @theme inline maps them to Tailwind utilities (bg-canvas,
+   text-muted, border-line, ...) so components stay theme-aware. */
 :root {
   --canvas: #ffffff;
   --canvas-subtle: #f6f8fa;
-  --border: #d0d7de;
+  --border-default: #d0d7de;
   --border-muted: #d8dee4;
-  --fg: #1f2328;
+  --fg-default: #1f2328;
   --fg-muted: #656d76;
-  --accent: #0969da;
+  --accent-default: #0969da;
   --accent-subtle: #ddf4ff;
-  --success-fg: #1a7f37;
-  --btn-primary: #1f883d;
-  --btn-primary-hover: #1a7f37;
-  --tab-active: #fd8c73;
+  --success-default: #1a7f37;
+  --btn-green: #1f883d;
+  --btn-green-hover: #1a7f37;
+  --tab-active-color: #fd8c73;
   --contrib-0: #ebedf0;
   --contrib-1: #9be9a8;
   --contrib-2: #40c463;
   --contrib-3: #30a14e;
   --contrib-4: #216e39;
-  --radius: 6px;
-  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans',
-    Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
-  --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas,
-    'Liberation Mono', monospace;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --canvas: #0d1117;
     --canvas-subtle: #161b22;
-    --border: #30363d;
+    --border-default: #30363d;
     --border-muted: #21262d;
-    --fg: #e6edf3;
+    --fg-default: #e6edf3;
     --fg-muted: #8b949e;
-    --accent: #58a6ff;
+    --accent-default: #58a6ff;
     --accent-subtle: rgba(56, 139, 253, 0.15);
-    --success-fg: #3fb950;
-    --btn-primary: #238636;
-    --btn-primary-hover: #2ea043;
-    --tab-active: #f78166;
+    --success-default: #3fb950;
+    --btn-green: #238636;
+    --btn-green-hover: #2ea043;
+    --tab-active-color: #f78166;
     --contrib-0: #161b22;
     --contrib-1: #0e4429;
     --contrib-2: #006d32;
@@ -46,141 +45,93 @@
   }
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-canvas-subtle: var(--canvas-subtle);
+  --color-line: var(--border-default);
+  --color-line-muted: var(--border-muted);
+  --color-fg: var(--fg-default);
+  --color-muted: var(--fg-muted);
+  --color-accent: var(--accent-default);
+  --color-accent-subtle: var(--accent-subtle);
+  --color-success: var(--success-default);
+  --color-btn-green: var(--btn-green);
+  --color-btn-green-hover: var(--btn-green-hover);
+  --color-tab-active: var(--tab-active-color);
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans',
+    Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+  --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas,
+    'Liberation Mono', monospace;
 }
 
-html {
-  scroll-behavior: smooth;
-  scroll-padding-top: 7rem;
-}
-
-body {
-  font-family: var(--font-sans);
-  font-size: 14px;
-  background: var(--canvas);
-  color: var(--fg);
-  line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
-}
-
-img {
-  max-width: 100%;
-  display: block;
-}
-
-a {
-  color: var(--accent);
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
-}
-
-svg {
-  fill: currentColor;
-  vertical-align: text-bottom;
-}
-
-.container {
-  max-width: 1216px;
-  margin-inline: auto;
-  padding-inline: 16px;
-}
-
-/* Bordered box, like GitHub's Box component */
-.box {
-  background: var(--canvas);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-}
-
-.box-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  background: var(--canvas-subtle);
-  border-bottom: 1px solid var(--border);
-  border-radius: var(--radius) var(--radius) 0 0;
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--fg-muted);
-}
-
-.box-body {
-  padding: 16px 24px;
-}
-
-/* GitHub-style buttons */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 5px 16px;
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 20px;
-  border-radius: var(--radius);
-  border: 1px solid var(--border);
-  background: var(--canvas-subtle);
-  color: var(--fg);
-  cursor: pointer;
-  transition: background 0.12s ease;
-}
-
-.btn:hover {
-  text-decoration: none;
-  background: color-mix(in srgb, var(--canvas-subtle) 90%, var(--fg));
-}
-
-.btn-primary {
-  background: var(--btn-primary);
-  border-color: rgba(31, 35, 40, 0.15);
-  color: #ffffff;
-}
-
-.btn-primary:hover {
-  background: var(--btn-primary-hover);
-}
-
-.btn-block {
-  display: flex;
-  width: 100%;
-}
-
-/* GitHub topic pill */
-.topic {
-  display: inline-block;
-  padding: 0 10px;
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 22px;
-  border-radius: 2em;
-  background: var(--accent-subtle);
-  color: var(--accent);
-}
-
-/* Section headings inside the main column */
-.section-heading {
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 16px;
-}
-
-.text-muted {
-  color: var(--fg-muted);
-}
-
-@media (prefers-reduced-motion: reduce) {
+@layer base {
   html {
-    scroll-behavior: auto;
+    scroll-behavior: smooth;
+    scroll-padding-top: 7rem;
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    @apply bg-canvas font-sans text-[14px] leading-normal text-fg antialiased;
+  }
+
+  a {
+    @apply text-accent;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  svg {
+    fill: currentColor;
+    vertical-align: text-bottom;
+  }
+}
+
+@layer components {
+  /* Bordered box, like GitHub's Box component */
+  .box {
+    @apply rounded-md border border-line bg-canvas;
+  }
+
+  .box-header {
+    @apply flex items-center gap-2 rounded-t-md border-b border-line bg-canvas-subtle px-4 py-2 font-mono text-xs text-muted;
+  }
+
+  .box-body {
+    @apply px-6 py-4;
+  }
+
+  /* GitHub-style buttons */
   .btn {
-    transition: none;
+    @apply inline-flex items-center justify-center gap-1.5 rounded-md border border-line bg-canvas-subtle px-4 py-[5px] text-sm font-medium leading-5 text-fg transition-colors;
+  }
+
+  .btn:hover {
+    text-decoration: none;
+    background: color-mix(in srgb, var(--canvas-subtle) 90%, var(--fg-default));
+  }
+
+  .btn-primary {
+    @apply border-black/15 bg-btn-green text-white;
+  }
+
+  .btn-primary:hover {
+    @apply bg-btn-green-hover;
+  }
+
+  /* GitHub topic pill */
+  .topic {
+    @apply inline-block rounded-full bg-accent-subtle px-2.5 text-xs font-medium leading-[22px] text-accent;
+  }
+
+  .section-heading {
+    @apply mb-4 text-base font-semibold;
   }
 }
