@@ -16,7 +16,7 @@ export const projects: Project[] = [
     language: 'Astro',
     tags: ['astro', 'typescript', 'github-actions'],
     repoUrl: 'https://github.com/patrickjamessalamat/my-portfolio-app',
-    demoUrl: 'https://patrickjamessalamat.github.io/my-portfolio-app/',
+    demoUrl: 'https://patrickjamessalamat.github.io/',
   },
   {
     title: 'ai-chat-assistant',

@@ -66,11 +66,12 @@ const base = import.meta.env.BASE_URL;
     </footer>
 
     <script>
-      // Highlight the tab of the section currently in view
+      // Highlight the tab of the section currently in view. Overview is the
+      // default: it wraps the whole page, so it is excluded from observation
+      // and used as the fallback whenever no other section is in view.
       const tabs = [...document.querySelectorAll<HTMLAnchorElement>('[data-tab]')];
-      const sections = tabs
-        .map((tab) => document.querySelector(tab.hash))
-        .filter((section): section is Element => section !== null);
+      const defaultHash = tabs[0]?.hash ?? '#overview';
+      const visible = new Set<string>();
 
       const activate = (hash: string) => {
         for (const tab of tabs) {
@@ -82,12 +83,19 @@ const base = import.meta.env.BASE_URL;
       const observer = new IntersectionObserver(
         (entries) => {
           for (const entry of entries) {
-            if (entry.isIntersecting) activate(`#${entry.target.id}`);
+            if (entry.isIntersecting) visible.add(`#${entry.target.id}`);
+            else visible.delete(`#${entry.target.id}`);
           }
+          const current = tabs.find((tab) => visible.has(tab.hash));
+          activate(current ? current.hash : defaultHash);
         },
-        { rootMargin: '-40% 0px -55% 0px' }
+        { rootMargin: '-35% 0px -55% 0px' }
       );
-      sections.forEach((section) => observer.observe(section));
+
+      for (const tab of tabs.slice(1)) {
+        const section = document.querySelector(tab.hash);
+        if (section) observer.observe(section);
+      }
     </script>
   </body>
 </html>

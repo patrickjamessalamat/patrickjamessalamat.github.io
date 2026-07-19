@@ -2,7 +2,7 @@
 
 Personal portfolio site built with [Astro](https://astro.build). Fully static, zero client-side JavaScript, deployed to GitHub Pages.
 
-**Live site:** https://patrickjamessalamat.github.io/my-portfolio-app/
+**Live site:** https://patrickjamessalamat.github.io/
 
 ## Editing your content
 
@@ -23,12 +23,10 @@ Also replace:
 
 ```sh
 npm install
-npm run dev      # http://localhost:4321/my-portfolio-app/
+npm run dev      # http://localhost:4321/
 npm run build    # output in dist/
 npm run preview  # preview the production build
 ```
-
-Note: the site is served under the `/my-portfolio-app/` base path (configured in `astro.config.mjs`) because GitHub Pages hosts project sites under a subpath.
 
 ## Deployment
 
@@ -36,12 +34,14 @@ Note: the site is served under the `/my-portfolio-app/` base path (configured in
 
 Every push to `main` triggers `.github/workflows/deploy.yml`, which builds the site and deploys it to GitHub Pages.
 
-One-time setup: in the GitHub repo go to **Settings → Pages** and set **Source** to **GitHub Actions**.
+One-time setup:
+1. The site is built for the domain root, so the repo must be renamed to **`patrickjamessalamat.github.io`** (Settings → General → Repository name). As a project site named `my-portfolio-app` it would 404, because GitHub serves project sites under a `/my-portfolio-app/` subpath.
+2. In **Settings → Pages** set **Source** to **GitHub Actions**.
 
 ### Moving to Vercel or Cloudflare Pages
 
-The site is plain static output, so migrating is trivial:
+The site is plain static output served from the root, so migrating is trivial:
 
-1. In `astro.config.mjs`, remove the `base` option (and update `site` to your new domain).
+1. In `astro.config.mjs`, update `site` to your new domain.
 2. **Vercel:** import the repo at vercel.com — Astro is auto-detected, no config needed.
 3. **Cloudflare Pages:** create a project from the repo — build command `npm run build`, output directory `dist`.
