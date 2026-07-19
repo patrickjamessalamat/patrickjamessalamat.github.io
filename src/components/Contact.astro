@@ -3,38 +3,34 @@ import { site } from '../data/site';
 ---
 
 <section id="contact">
-  <div class="container contact-box">
-    <h2 class="section-title">Get in touch</h2>
-    <p class="section-lead">
-      I’m open to opportunities, collaborations, and interesting conversations.
-      The fastest way to reach me is by email.
-    </p>
-    <a class="btn btn-primary" href={`mailto:${site.email}`}>{site.email}</a>
-    <ul class="socials">
-      {site.socials.map((social) => (
-        <li>
-          <a href={social.url} target="_blank" rel="noopener noreferrer">{social.label} ↗</a>
-        </li>
-      ))}
-    </ul>
+  <h2 class="section-heading">Get in touch</h2>
+  <div class="box">
+    <div class="box-body contact-body">
+      <p class="text-muted">
+        I’m open to opportunities, collaborations, and interesting conversations.
+        The fastest way to reach me is by email.
+      </p>
+      <div class="actions">
+        <a class="btn btn-primary" href={`mailto:${site.email}`}>{site.email}</a>
+        {site.socials.map((social) => (
+          <a class="btn" href={social.url} target="_blank" rel="noopener noreferrer">
+            {social.label}
+          </a>
+        ))}
+      </div>
+    </div>
   </div>
 </section>
 
 <style>
-  .contact-box {
-    text-align: center;
+  .contact-body {
+    display: grid;
+    gap: 16px;
   }
 
-  .contact-box .section-lead {
-    margin-inline: auto;
-  }
-
-  .socials {
+  .actions {
     display: flex;
-    justify-content: center;
-    gap: 1.5rem;
-    list-style: none;
-    margin-top: 1.75rem;
-    font-weight: 600;
+    flex-wrap: wrap;
+    gap: 8px;
   }
 </style>

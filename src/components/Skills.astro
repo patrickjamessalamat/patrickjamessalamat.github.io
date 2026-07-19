@@ -3,16 +3,15 @@ import { skills } from '../data/skills';
 ---
 
 <section id="skills">
-  <div class="container">
-    <h2 class="section-title">Skills</h2>
-    <p class="section-lead">Technologies and tools I work with.</p>
-    <div class="grid">
+  <h2 class="section-heading">Skills</h2>
+  <div class="box">
+    <div class="box-body groups">
       {skills.map((group) => (
         <div class="group">
           <h3>{group.category}</h3>
           <ul>
             {group.items.map((item) => (
-              <li class="tag">{item}</li>
+              <li class="topic">{item}</li>
             ))}
           </ul>
         </div>
@@ -22,29 +21,21 @@ import { skills } from '../data/skills';
 </section>
 
 <style>
-  .grid {
+  .groups {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
-    gap: 1.25rem;
+    gap: 16px;
   }
 
-  .group {
-    background: var(--bg-alt);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 1.25rem;
+  .group h3 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
   }
 
-  h3 {
-    font-size: 1rem;
-    margin-bottom: 0.75rem;
-    letter-spacing: -0.01em;
-  }
-
-  ul {
+  .group ul {
+    list-style: none;
     display: flex;
     flex-wrap: wrap;
-    gap: 0.4rem;
-    list-style: none;
+    gap: 6px;
   }
 </style>

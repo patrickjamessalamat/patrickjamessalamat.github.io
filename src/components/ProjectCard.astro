@@ -6,84 +6,123 @@ interface Props {
 }
 
 const { project } = Astro.props;
-const base = import.meta.env.BASE_URL;
+
+const languageColors: Record<string, string> = {
+  TypeScript: '#3178c6',
+  JavaScript: '#f1e05a',
+  Python: '#3572a5',
+  Astro: '#ff5a03',
+  HTML: '#e34c26',
+  CSS: '#663399',
+  Go: '#00add8',
+  Rust: '#dea584',
+};
+
+const dotColor = languageColors[project.language] ?? '#8b949e';
+const titleUrl = project.repoUrl ?? project.demoUrl;
 ---
 
-<article class="card">
-  {project.image && (
-    <img src={`${base}${project.image}`} alt={`Screenshot of ${project.title}`} loading="lazy" />
-  )}
-  <div class="card-body">
-    <h3>{project.title}</h3>
-    <p>{project.description}</p>
-    <ul class="tags">
-      {project.tags.map((tag) => (
-        <li class="tag">{tag}</li>
-      ))}
-    </ul>
-    <div class="links">
-      {project.demoUrl && (
-        <a href={project.demoUrl} target="_blank" rel="noopener noreferrer">Live demo ↗</a>
-      )}
-      {project.repoUrl && (
-        <a href={project.repoUrl} target="_blank" rel="noopener noreferrer">Source ↗</a>
-      )}
-    </div>
+<article class="repo-card box">
+  <div class="repo-title">
+    <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+      <path d="M3 2.5A1.5 1.5 0 0 1 4.5 1h8a.5.5 0 0 1 .5.5v11a.5.5 0 0 1-.5.5H5v1h7.5a.5.5 0 0 1 0 1h-8A1.5 1.5 0 0 1 3 13.5Zm1.5-.5a.5.5 0 0 0-.5.5v10.6c.2-.1.3-.1.5-.1H12V2Z"/>
+    </svg>
+    {titleUrl ? (
+      <a href={titleUrl} target="_blank" rel="noopener noreferrer">{project.title}</a>
+    ) : (
+      <span class="repo-name">{project.title}</span>
+    )}
+    <span class="visibility">Public</span>
+  </div>
+  <p class="repo-desc">{project.description}</p>
+  <ul class="topics">
+    {project.tags.map((tag) => (
+      <li class="topic">{tag}</li>
+    ))}
+  </ul>
+  <div class="repo-meta">
+    <span class="lang">
+      <span class="lang-dot" style={`background:${dotColor}`} aria-hidden="true"></span>
+      {project.language}
+    </span>
+    {project.demoUrl && (
+      <a href={project.demoUrl} target="_blank" rel="noopener noreferrer">Live demo</a>
+    )}
+    {project.repoUrl && (
+      <a href={project.repoUrl} target="_blank" rel="noopener noreferrer">Source</a>
+    )}
   </div>
 </article>
 
 <style>
-  .card {
-    background: var(--bg-alt);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    overflow: hidden;
+  .repo-card {
+    padding: 16px;
     display: flex;
     flex-direction: column;
-    transition: transform 0.18s ease, box-shadow 0.18s ease;
+    gap: 8px;
   }
 
-  .card:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow);
-  }
-
-  .card-body {
-    padding: 1.25rem;
+  .repo-title {
     display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    flex: 1;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
   }
 
-  h3 {
-    font-size: 1.15rem;
-    letter-spacing: -0.01em;
+  .repo-title svg {
+    fill: var(--fg-muted);
+    flex-shrink: 0;
   }
 
-  p {
-    color: var(--text-muted);
-    font-size: 0.95rem;
-    flex: 1;
-  }
-
-  .tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
-    list-style: none;
-  }
-
-  .links {
-    display: flex;
-    gap: 1rem;
-    font-size: 0.92rem;
+  .repo-title a,
+  .repo-name {
     font-weight: 600;
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .card {
-      transition: none;
-    }
+  .visibility {
+    font-size: 12px;
+    color: var(--fg-muted);
+    border: 1px solid var(--border);
+    border-radius: 2em;
+    padding: 0 7px;
+    line-height: 18px;
+  }
+
+  .repo-desc {
+    font-size: 12px;
+    color: var(--fg-muted);
+    flex: 1;
+  }
+
+  .topics {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .repo-meta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 12px;
+    color: var(--fg-muted);
+  }
+
+  .repo-meta a {
+    font-weight: 500;
+  }
+
+  .lang {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .lang-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
   }
 </style>

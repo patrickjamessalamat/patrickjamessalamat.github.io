@@ -1,6 +1,7 @@
 // TODO: replace with your real info
 export const site = {
   name: 'Patrick James Salamat',
+  handle: 'patrickjamessalamat',
   role: 'Software Engineer',
   tagline:
     'I build practical, well-crafted software — from web apps to AI-powered tools.',

@@ -8,12 +8,12 @@ interface Props {
 }
 
 const {
-  title = `${site.name} — ${site.role}`,
+  title = `${site.name} (${site.handle})`,
   description = site.tagline,
 } = Astro.props;
 
-const navLinks = [
-  { href: '#about', label: 'About' },
+const tabs = [
+  { href: '#overview', label: 'Overview' },
   { href: '#projects', label: 'Projects' },
   { href: '#skills', label: 'Skills' },
   { href: '#experience', label: 'Experience' },
@@ -38,26 +38,57 @@ const base = import.meta.env.BASE_URL;
   </head>
   <body>
     <header class="site-header">
-      <nav class="container nav">
-        <a href={base} class="brand">{site.name.split(' ')[0]}<span class="brand-dot">.</span></a>
-        <ul class="nav-links">
-          {navLinks.map((link) => (
-            <li><a href={link.href}>{link.label}</a></li>
-          ))}
-        </ul>
+      <div class="container header-inner">
+        <a href={base} class="brand">
+          <span class="brand-avatar" aria-hidden="true">{site.name.charAt(0)}</span>
+          <span class="brand-name">{site.handle}</span>
+        </a>
+        <span class="header-note">portfolio</span>
+      </div>
+      <nav class="container tab-nav" aria-label="Profile sections">
+        {tabs.map((tab, index) => (
+          <a href={tab.href} class="tab" data-tab aria-current={index === 0 ? 'page' : undefined}>
+            {tab.label}
+          </a>
+        ))}
       </nav>
     </header>
 
-    <main>
+    <main id="overview">
       <slot />
     </main>
 
     <footer class="site-footer">
       <div class="container footer-inner">
         <p>© {new Date().getFullYear()} {site.name}</p>
-        <p class="footer-note">Built with Astro · Hosted on GitHub Pages</p>
+        <p>Built with Astro · Inspired by the GitHub profile layout</p>
       </div>
     </footer>
+
+    <script>
+      // Highlight the tab of the section currently in view
+      const tabs = [...document.querySelectorAll<HTMLAnchorElement>('[data-tab]')];
+      const sections = tabs
+        .map((tab) => document.querySelector(tab.hash))
+        .filter((section): section is Element => section !== null);
+
+      const activate = (hash: string) => {
+        for (const tab of tabs) {
+          if (tab.hash === hash) tab.setAttribute('aria-current', 'page');
+          else tab.removeAttribute('aria-current');
+        }
+      };
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) activate(`#${entry.target.id}`);
+          }
+        },
+        { rootMargin: '-40% 0px -55% 0px' }
+      );
+      sections.forEach((section) => observer.observe(section));
+    </script>
   </body>
 </html>
 
@@ -66,70 +97,87 @@ const base = import.meta.env.BASE_URL;
     position: sticky;
     top: 0;
     z-index: 10;
-    background: color-mix(in srgb, var(--bg) 85%, transparent);
-    backdrop-filter: blur(8px);
+    background: var(--canvas-subtle);
     border-bottom: 1px solid var(--border);
   }
 
-  .nav {
+  .header-inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 3.75rem;
+    padding-block: 12px;
   }
 
   .brand {
-    font-weight: 800;
-    font-size: 1.15rem;
-    color: var(--text);
-    letter-spacing: -0.02em;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--fg);
+    font-weight: 600;
+    font-size: 14px;
   }
 
   .brand:hover {
     text-decoration: none;
-  }
-
-  .brand-dot {
     color: var(--accent);
   }
 
-  .nav-links {
+  .brand-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #1f883d, #0969da);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .header-note {
+    font-size: 12px;
+    color: var(--fg-muted);
+    font-family: var(--font-mono);
+  }
+
+  .tab-nav {
     display: flex;
-    gap: 1.5rem;
-    list-style: none;
+    gap: 8px;
+    overflow-x: auto;
   }
 
-  .nav-links a {
-    color: var(--text-muted);
-    font-size: 0.92rem;
-    font-weight: 500;
+  .tab {
+    padding: 8px 12px 10px;
+    color: var(--fg);
+    font-size: 14px;
+    line-height: 23px;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
   }
 
-  .nav-links a:hover {
-    color: var(--accent);
+  .tab:hover {
     text-decoration: none;
+    border-bottom-color: var(--border);
   }
 
-  @media (max-width: 640px) {
-    .nav-links {
-      gap: 0.9rem;
-    }
-    .nav-links li:nth-child(n + 4) {
-      display: none;
-    }
+  .tab[aria-current='page'] {
+    font-weight: 600;
+    border-bottom-color: var(--tab-active);
   }
 
   .site-footer {
     border-top: 1px solid var(--border);
-    padding-block: 1.5rem;
+    margin-top: 40px;
+    padding-block: 24px;
   }
 
   .footer-inner {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 0.5rem;
-    color: var(--text-muted);
-    font-size: 0.88rem;
+    gap: 8px;
+    color: var(--fg-muted);
+    font-size: 12px;
   }
 </style>

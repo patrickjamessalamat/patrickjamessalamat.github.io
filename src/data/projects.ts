@@ -1,34 +1,45 @@
 export interface Project {
   title: string;
   description: string;
+  language: string; // shown with a colored dot, like GitHub's repo language
   tags: string[];
   demoUrl?: string;
   repoUrl?: string;
-  image?: string; // path under public/images/
 }
 
 // TODO: replace with your real projects
 export const projects: Project[] = [
   {
-    title: 'Portfolio Website',
+    title: 'my-portfolio-app',
     description:
-      'This site — a fast, zero-JS static portfolio built with Astro and deployed to GitHub Pages via GitHub Actions.',
-    tags: ['Astro', 'TypeScript', 'GitHub Actions'],
+      'This site — a GitHub-profile-style portfolio built with Astro, deployed to GitHub Pages via GitHub Actions.',
+    language: 'Astro',
+    tags: ['astro', 'typescript', 'github-actions'],
     repoUrl: 'https://github.com/patrickjamessalamat/my-portfolio-app',
     demoUrl: 'https://patrickjamessalamat.github.io/my-portfolio-app/',
   },
   {
-    title: 'AI Chat Assistant',
+    title: 'ai-chat-assistant',
     description:
       'A conversational assistant that answers questions over custom documents using retrieval-augmented generation.',
-    tags: ['Python', 'FastAPI', 'LLM', 'RAG'],
+    language: 'Python',
+    tags: ['fastapi', 'llm', 'rag'],
     repoUrl: 'https://github.com/patrickjamessalamat',
   },
   {
-    title: 'Task Manager App',
+    title: 'task-manager-app',
     description:
       'A full-stack task management app with authentication, real-time updates, and a clean drag-and-drop interface.',
-    tags: ['React', 'Node.js', 'PostgreSQL'],
+    language: 'TypeScript',
+    tags: ['react', 'nodejs', 'postgresql'],
+    repoUrl: 'https://github.com/patrickjamessalamat',
+  },
+  {
+    title: 'automation-scripts',
+    description:
+      'A collection of small scripts that automate everyday developer chores — file wrangling, report generation, deployments.',
+    language: 'Python',
+    tags: ['cli', 'automation'],
     repoUrl: 'https://github.com/patrickjamessalamat',
   },
 ];
