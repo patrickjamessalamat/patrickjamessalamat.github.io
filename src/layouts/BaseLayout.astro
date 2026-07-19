@@ -90,21 +90,21 @@ const base = import.meta.env.BASE_URL;
           </span>
         </div>
       </div>
-      <!-- Tab row: full width, icons per menu, follows the active theme -->
-      <nav class="flex gap-2 overflow-x-auto border-b border-line bg-canvas px-4" aria-label="Profile sections">
+      <!-- Tab row: full width, icons per menu, always black like the top bar -->
+      <nav class="flex gap-2 overflow-x-auto border-b border-[#30363d] bg-[#010409] px-4" aria-label="Profile sections">
         {tabs.map((tab, index) => (
           <a
             href={tab.href}
-            class="flex items-center gap-2 whitespace-nowrap border-b-2 border-transparent px-3 pb-2.5 pt-2 text-sm leading-[23px] text-fg hover:border-line hover:no-underline aria-[current=page]:border-tab-active aria-[current=page]:font-semibold"
+            class="flex items-center gap-2 whitespace-nowrap border-b-2 border-transparent px-3 pb-2.5 pt-2 text-sm leading-[23px] text-[#e6edf3] hover:border-[#30363d] hover:no-underline aria-[current=page]:border-[#f78166] aria-[current=page]:font-semibold"
             data-tab
             aria-current={index === 0 ? 'page' : undefined}
           >
-            <svg class="shrink-0 fill-muted" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+            <svg class="shrink-0 fill-[#9198a1]" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
               <path d={tab.icon} />
             </svg>
             {tab.label}
             {tab.count !== undefined && (
-              <span class="rounded-full bg-muted/20 px-2 text-xs font-medium leading-[18px]">{tab.count}</span>
+              <span class="rounded-full bg-white/15 px-2 text-xs font-medium leading-[18px]">{tab.count}</span>
             )}
           </a>
         ))}
