@@ -23,8 +23,11 @@
   --contrib-4: #216e39;
 }
 
+/* Dark palette applies when the system prefers dark (and the user has not
+   forced light via the toggle), or when the toggle forces dark. The two
+   blocks must stay identical. */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme='light']) {
     --canvas: #0d1117;
     --canvas-subtle: #161b22;
     --border-default: #30363d;
@@ -42,6 +45,45 @@
     --contrib-2: #006d32;
     --contrib-3: #26a641;
     --contrib-4: #39d353;
+  }
+}
+
+:root[data-theme='dark'] {
+  --canvas: #0d1117;
+  --canvas-subtle: #161b22;
+  --border-default: #30363d;
+  --border-muted: #21262d;
+  --fg-default: #e6edf3;
+  --fg-muted: #8b949e;
+  --accent-default: #58a6ff;
+  --accent-subtle: rgba(56, 139, 253, 0.15);
+  --success-default: #3fb950;
+  --btn-green: #238636;
+  --btn-green-hover: #2ea043;
+  --tab-active-color: #f78166;
+  --contrib-0: #161b22;
+  --contrib-1: #0e4429;
+  --contrib-2: #006d32;
+  --contrib-3: #26a641;
+  --contrib-4: #39d353;
+}
+
+/* Theme-toggle icon visibility: show the sun when dark is active */
+.icon-sun {
+  display: none;
+}
+:root[data-theme='dark'] .icon-sun {
+  display: inline;
+}
+:root[data-theme='dark'] .icon-moon {
+  display: none;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .icon-sun {
+    display: inline;
+  }
+  :root:not([data-theme]) .icon-moon {
+    display: none;
   }
 }
 
