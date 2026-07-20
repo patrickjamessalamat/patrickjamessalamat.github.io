@@ -1,22 +1,11 @@
 ---
-import type { Project } from '../data/projects';
+import { languageColors, type Project } from '../data/projects';
 
 interface Props {
   project: Project;
 }
 
 const { project } = Astro.props;
-
-const languageColors: Record<string, string> = {
-  TypeScript: '#3178c6',
-  JavaScript: '#f1e05a',
-  Python: '#3572a5',
-  Astro: '#ff5a03',
-  HTML: '#e34c26',
-  CSS: '#663399',
-  Go: '#00add8',
-  Rust: '#dea584',
-};
 
 const dotColor = languageColors[project.language] ?? '#8b949e';
 const titleUrl = project.repoUrl ?? project.demoUrl;

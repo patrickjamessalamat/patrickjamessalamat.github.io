@@ -1,0 +1,106 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { languageColors, projects } from '../data/projects';
+import { site } from '../data/site';
+
+const languages = [...new Set(projects.map((project) => project.language))].sort();
+---
+
+<BaseLayout
+  title={`Projects · ${site.name}`}
+  description={`All projects by ${site.name}.`}
+>
+  <div class="mx-auto max-w-[1012px] px-4 py-6">
+    <!-- Filter bar, like GitHub's Repositories tab -->
+    <div class="flex flex-wrap gap-2 border-b border-line pb-4">
+      <input
+        id="project-search"
+        type="search"
+        placeholder="Find a project…"
+        autocomplete="off"
+        class="min-w-48 flex-1 rounded-md border border-line bg-canvas px-3 py-[5px] text-sm placeholder:text-muted focus:border-accent focus:outline-none"
+      />
+      <select
+        id="project-lang"
+        aria-label="Filter by language"
+        class="cursor-pointer rounded-md border border-line bg-canvas-subtle px-3 py-[5px] text-sm font-medium"
+      >
+        <option value="all">All languages</option>
+        {languages.map((language) => <option value={language}>{language}</option>)}
+      </select>
+    </div>
+
+    <ul>
+      {projects.map((project) => (
+        <li
+          class="project-row border-b border-line py-6"
+          data-search={`${project.title} ${project.description} ${project.tags.join(' ')}`.toLowerCase()}
+          data-lang={project.language}
+        >
+          <div class="flex items-center gap-2">
+            <h2 class="text-xl font-semibold">
+              {project.repoUrl || project.demoUrl ? (
+                <a href={project.repoUrl ?? project.demoUrl} target="_blank" rel="noopener noreferrer">
+                  {project.title}
+                </a>
+              ) : (
+                project.title
+              )}
+            </h2>
+            <span class="rounded-full border border-line px-[7px] text-xs leading-[18px] text-muted">Public</span>
+          </div>
+          <p class="mt-1 max-w-[640px] text-sm text-muted">{project.description}</p>
+          <ul class="mt-2 flex flex-wrap gap-1.5">
+            {project.tags.map((tag) => (
+              <li class="topic">{tag}</li>
+            ))}
+          </ul>
+          <div class="mt-3 flex items-center gap-4 text-xs text-muted">
+            <span class="inline-flex items-center gap-[5px]">
+              <span
+                class="inline-block h-3 w-3 rounded-full"
+                style={`background:${languageColors[project.language] ?? '#8b949e'}`}
+                aria-hidden="true"
+              ></span>
+              {project.language}
+            </span>
+            {project.demoUrl && (
+              <a class="font-medium" href={project.demoUrl} target="_blank" rel="noopener noreferrer">Live demo</a>
+            )}
+            {project.repoUrl && (
+              <a class="font-medium" href={project.repoUrl} target="_blank" rel="noopener noreferrer">Source</a>
+            )}
+          </div>
+        </li>
+      ))}
+    </ul>
+
+    <p id="no-results" hidden class="py-8 text-center text-muted">
+      No projects match your search.
+    </p>
+  </div>
+
+  <script>
+    const search = document.querySelector<HTMLInputElement>('#project-search');
+    const lang = document.querySelector<HTMLSelectElement>('#project-lang');
+    const rows = [...document.querySelectorAll<HTMLElement>('.project-row')];
+    const empty = document.querySelector<HTMLElement>('#no-results');
+
+    const applyFilter = () => {
+      const query = (search?.value ?? '').trim().toLowerCase();
+      const language = lang?.value ?? 'all';
+      let visible = 0;
+      for (const row of rows) {
+        const matches =
+          (row.dataset.search ?? '').includes(query) &&
+          (language === 'all' || row.dataset.lang === language);
+        row.hidden = !matches;
+        if (matches) visible++;
+      }
+      if (empty) empty.hidden = visible > 0;
+    };
+
+    search?.addEventListener('input', applyFilter);
+    lang?.addEventListener('change', applyFilter);
+  </script>
+</BaseLayout>

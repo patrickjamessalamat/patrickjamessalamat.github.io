@@ -5,7 +5,20 @@ export interface Project {
   tags: string[];
   demoUrl?: string;
   repoUrl?: string;
+  pinned?: boolean; // pinned projects also appear on the Overview page
 }
+
+// GitHub's language colors, shared by the pinned cards and the Projects page
+export const languageColors: Record<string, string> = {
+  TypeScript: '#3178c6',
+  JavaScript: '#f1e05a',
+  Python: '#3572a5',
+  Astro: '#ff5a03',
+  HTML: '#e34c26',
+  CSS: '#663399',
+  Go: '#00add8',
+  Rust: '#dea584',
+};
 
 // TODO: replace with your real projects
 export const projects: Project[] = [
@@ -17,6 +30,7 @@ export const projects: Project[] = [
     tags: ['astro', 'typescript', 'github-actions'],
     repoUrl: 'https://github.com/patrickjamessalamat/my-portfolio-app',
     demoUrl: 'https://patrickjamessalamat.github.io/',
+    pinned: true,
   },
   {
     title: 'ai-chat-assistant',
@@ -25,6 +39,7 @@ export const projects: Project[] = [
     language: 'Python',
     tags: ['fastapi', 'llm', 'rag'],
     repoUrl: 'https://github.com/patrickjamessalamat',
+    pinned: true,
   },
   {
     title: 'task-manager-app',
@@ -33,6 +48,7 @@ export const projects: Project[] = [
     language: 'TypeScript',
     tags: ['react', 'nodejs', 'postgresql'],
     repoUrl: 'https://github.com/patrickjamessalamat',
+    pinned: true,
   },
   {
     title: 'automation-scripts',

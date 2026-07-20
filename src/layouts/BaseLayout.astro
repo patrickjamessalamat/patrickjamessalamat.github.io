@@ -22,15 +22,37 @@ const icons = {
   mail: 'M1 4.5A1.5 1.5 0 0 1 2.5 3h11A1.5 1.5 0 0 1 15 4.5v7a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 1 11.5Zm1.7-.2 5.3 4 5.3-4H2.7ZM14 5.8 8.6 9.9a1 1 0 0 1-1.2 0L2 5.8v5.7c0 .3.2.5.5.5h11c.3 0 .5-.2.5-.5Z',
 };
 
-const tabs = [
-  { href: '#overview', label: 'Overview', icon: icons.book },
-  { href: '#projects', label: 'Projects', icon: icons.table, count: projects.length },
-  { href: '#skills', label: 'Skills', icon: icons.zap },
-  { href: '#experience', label: 'Experience', icon: icons.briefcase },
-  { href: '#contact', label: 'Contact', icon: icons.mail },
-];
-
 const base = import.meta.env.BASE_URL;
+
+// On the Projects page the anchor tabs point back to the home page; on the
+// home page they are in-page anchors tracked by the scroll observer.
+const isProjectsPage = Astro.url.pathname.replace(/\/$/, '').endsWith('/projects');
+
+const tabs = [
+  {
+    href: isProjectsPage ? base : '#overview',
+    label: 'Overview',
+    icon: icons.book,
+    anchor: !isProjectsPage,
+    current: !isProjectsPage,
+  },
+  {
+    href: `${base}projects/`,
+    label: 'Projects',
+    icon: icons.table,
+    count: projects.length,
+    anchor: false,
+    current: isProjectsPage,
+  },
+  { href: isProjectsPage ? `${base}#skills` : '#skills', label: 'Skills', icon: icons.zap, anchor: !isProjectsPage },
+  {
+    href: isProjectsPage ? `${base}#experience` : '#experience',
+    label: 'Experience',
+    icon: icons.briefcase,
+    anchor: !isProjectsPage,
+  },
+  { href: isProjectsPage ? `${base}#contact` : '#contact', label: 'Contact', icon: icons.mail, anchor: !isProjectsPage },
+];
 ---
 
 <!doctype html>
@@ -44,7 +66,7 @@ const base = import.meta.env.BASE_URL;
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
-    <link rel="canonical" href={Astro.site ? new URL(base, Astro.site).href : base} />
+    <link rel="canonical" href={Astro.site ? new URL(Astro.url.pathname, Astro.site).href : Astro.url.pathname} />
     <script is:inline>
       // Apply the stored theme before first paint to avoid a flash
       const storedTheme = localStorage.getItem('theme');
@@ -92,12 +114,12 @@ const base = import.meta.env.BASE_URL;
       </div>
       <!-- Tab row: full width, icons per menu, always black like the top bar -->
       <nav class="flex gap-2 overflow-x-auto border-b border-[#30363d] bg-[#010409] px-4" aria-label="Profile sections">
-        {tabs.map((tab, index) => (
+        {tabs.map((tab) => (
           <a
             href={tab.href}
             class="flex items-center gap-2 whitespace-nowrap border-b-2 border-transparent px-3 pb-2.5 pt-2 text-sm leading-[23px] text-[#e6edf3] hover:border-[#30363d] hover:no-underline aria-[current=page]:border-[#f78166] aria-[current=page]:font-semibold"
-            data-tab
-            aria-current={index === 0 ? 'page' : undefined}
+            data-tab={tab.anchor ? 'true' : undefined}
+            aria-current={tab.current ? 'page' : undefined}
           >
             <svg class="shrink-0 fill-[#9198a1]" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
               <path d={tab.icon} />

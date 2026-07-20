@@ -1,11 +1,17 @@
 ---
 import { projects } from '../data/projects';
 import ProjectCard from './ProjectCard.astro';
+
+const base = import.meta.env.BASE_URL;
+const pinned = projects.filter((project) => project.pinned);
 ---
 
-<section id="projects">
-  <h2 class="section-heading">Pinned</h2>
+<section>
+  <div class="mb-4 flex items-baseline justify-between">
+    <h2 class="text-base font-semibold">Pinned</h2>
+    <a class="text-xs" href={`${base}projects/`}>View all projects →</a>
+  </div>
   <div class="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-4">
-    {projects.map((project) => <ProjectCard project={project} />)}
+    {pinned.map((project) => <ProjectCard project={project} />)}
   </div>
 </section>
