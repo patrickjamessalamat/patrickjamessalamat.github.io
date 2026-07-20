@@ -3,22 +3,69 @@ export interface SkillGroup {
   items: string[];
 }
 
-// TODO: adjust to your real skill set
+// Ordered so the large groups fill the first grid row and the small
+// ones share the second (see src/pages/stacks.astro).
 export const skills: SkillGroup[] = [
   {
-    category: 'Languages',
-    items: ['TypeScript', 'JavaScript', 'Python', 'SQL', 'HTML', 'CSS'],
+    category: 'Frontend',
+    items: [
+      'JavaScript',
+      'TypeScript',
+      'React',
+      'Vue.js',
+      'Tailwind CSS',
+      'Kendo UI',
+      'Knockout.js',
+      'Vanilla JS',
+      'SCSS',
+      'Vite',
+      'Webpack',
+      'ESLint',
+      'Prettier',
+    ],
   },
   {
-    category: 'Frameworks & Libraries',
-    items: ['React', 'Node.js', 'Astro', 'FastAPI', 'Express'],
+    category: 'Backend',
+    items: [
+      'MS SQL',
+      'PostgreSQL',
+      'MySQL',
+      'C#',
+      'VB.NET',
+      'VB6',
+      'Java',
+      'PHP',
+      'Laravel',
+      'Node.js',
+      'REST',
+    ],
+  },
+  {
+    category: 'Developer Tools',
+    items: [
+      'Git',
+      'GitHub',
+      'GitLab',
+      'Bitbucket',
+      'VS Code',
+      'Visual Studio',
+      'Enterprise Architect',
+      'Teams',
+      'JIRA',
+      'Figma',
+      'Postman',      
+    ],
   },
   {
     category: 'AI Engineering',
-    items: ['LLM APIs', 'RAG', 'Prompt Engineering', 'LangChain'],
+    items: ['Claude Code', 'Codex', 'GitHub Copilot', 'OpenAI', 'Anthropic'],
   },
   {
-    category: 'Tools & Platforms',
-    items: ['Git', 'GitHub Actions', 'Docker', 'PostgreSQL', 'Vercel', 'Cloudflare'],
+    category: 'DevOps & Cloud',
+    items: ['Azure', 'GitHub Actions', 'Docker'],
+  },
+  {
+    category: 'CMS',
+    items: ['Umbraco', 'WordPress'],
   },
 ];

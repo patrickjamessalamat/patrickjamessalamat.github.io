@@ -2,20 +2,36 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { skills } from '../data/skills';
 import { site } from '../data/site';
+
+const totalItems = skills.reduce((sum, group) => sum + group.items.length, 0);
+const slug = (category: string) => category.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 ---
 
 <BaseLayout title={`Stacks · ${site.name}`} description={`Technologies and tools ${site.name} works with.`}>
-  <div class="mx-auto max-w-[1012px] px-4 py-6">
-    <div class="border-b border-line pb-4">
-      <h1 class="text-xl font-semibold">Stacks</h1>
-      <p class="mt-1 text-sm text-muted">Technologies and tools I work with.</p>
+  <div class="mx-auto max-w-[1216px] px-4 py-8">
+    <div class="flex flex-wrap items-baseline justify-between gap-2 border-b border-line pb-4">
+      <div>
+        <h1 class="text-xl font-semibold">Tech Stacks</h1>
+        <p class="mt-1 text-sm text-muted">Technologies and tools I work with.</p>
+      </div>
+      <p class="text-sm text-muted">
+        <span class="font-semibold text-fg">{totalItems}</span> technologies ·
+        <span class="font-semibold text-fg">{skills.length}</span> areas
+      </p>
     </div>
-    <div class="mt-6 grid grid-cols-1 items-start gap-4 md:grid-cols-2">
+
+    <div class="mt-6 grid auto-rows-fr grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
       {skills.map((group) => (
-        <div class="box">
-          <div class="box-header">{group.category.toLowerCase().replace(/[^a-z0-9]+/g, '-')}.md</div>
-          <div class="box-body">
-            <ul class="flex flex-wrap gap-1.5">
+        <div class="box flex flex-col">
+          <div class="box-header justify-between">
+            <span>{slug(group.category)}.md</span>
+            <span class="rounded-full bg-muted/20 px-2 font-sans text-xs font-medium leading-[18px] text-fg">
+              {group.items.length}
+            </span>
+          </div>
+          <div class="flex-1 p-4">
+            <h2 class="text-sm font-semibold">{group.category}</h2>
+            <ul class="mt-3 flex flex-wrap gap-2">
               {group.items.map((item) => (
                 <li class="topic">{item}</li>
               ))}

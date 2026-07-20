@@ -5,16 +5,16 @@ const base = import.meta.env.BASE_URL;
 ---
 
 <aside class="flex flex-col gap-4">
-  <img
-    class="aspect-square w-[min(260px,60vw)] rounded-full border border-line object-cover"
-    src={`${base}${site.avatar}`}
-    alt={`Photo of ${site.name}`}
-    width="460"
-    height="460"
-  />
-  <div>
-    <h1 class="text-2xl font-semibold leading-tight">{site.name}</h1>
-    <p class="text-lg font-light text-muted">{site.handle} · {site.role}</p>
+  <div class="flex items-center gap-4 md:flex-col md:items-stretch">
+    <img
+      class="aspect-square w-20 shrink-0 rounded-full border border-line object-cover sm:w-24 md:w-full"
+      src={`${base}${site.avatar}`}
+      alt={`Photo of ${site.name}`}
+    />
+    <div>
+      <h1 class="text-xl font-semibold leading-tight sm:text-2xl">{site.name}</h1>
+      <p class="text-base font-light text-muted sm:text-lg">{site.handle} · {site.role}</p>
+    </div>
   </div>
   <p class="text-base">{site.tagline}</p>
   <a class="btn btn-primary flex w-full" href={`${base}${site.resumeFile}`} download>

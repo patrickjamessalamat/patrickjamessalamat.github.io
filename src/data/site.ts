@@ -16,5 +16,7 @@ export const site = {
     { label: 'LinkedIn', url: 'https://www.linkedin.com/' }, // TODO: add your profile
   ],
   resumeFile: 'resume.pdf', // lives in public/
-  avatar: 'images/avatar.png', // lives in public/
+  // Profile photo, also used as the favicon. To change it, just replace
+  // public/images/profile.png with a new photo (square looks best).
+  avatar: 'images/profile.png',
 };
