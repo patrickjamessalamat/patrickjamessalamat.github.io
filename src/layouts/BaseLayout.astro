@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { ClientRouter } from 'astro:transitions';
 import { site } from '../data/site';
 import { projects } from '../data/projects';
 
@@ -74,8 +75,11 @@ const tabs = [
         document.documentElement.dataset.theme = storedTheme;
       }
     </script>
+    <ClientRouter />
   </head>
   <body>
+    <!-- GitHub-style top progress bar for client-side navigation -->
+    <div id="page-loader" transition:persist="page-loader" aria-hidden="true"></div>
     <header class="sticky top-0 z-10">
       <!-- Top bar: always GitHub's dark header color, full width -->
       <div class="flex items-center justify-between bg-[#010409] px-4 py-3">
@@ -145,46 +149,81 @@ const tabs = [
     </footer>
 
     <script>
-      // Highlight the tab of the section currently in view. Overview is the
-      // default: it wraps the whole page, so it is excluded from observation
-      // and used as the fallback whenever no other section is in view.
-      const tabs = [...document.querySelectorAll<HTMLAnchorElement>('[data-tab]')];
-      const defaultHash = tabs[0]?.hash ?? '#overview';
-      const visible = new Set<string>();
+      // Runs on initial load AND after every client-side navigation, since
+      // the ClientRouter swaps the body and all element listeners with it.
+      const initPage = () => {
+        // Highlight the tab of the section currently in view. Overview is
+        // the default: it wraps the whole page, so it is excluded from
+        // observation and used as the fallback when no section is in view.
+        const tabs = [...document.querySelectorAll<HTMLAnchorElement>('[data-tab]')];
+        const defaultHash = tabs[0]?.hash ?? '#overview';
+        const visible = new Set<string>();
 
-      const activate = (hash: string) => {
-        for (const tab of tabs) {
-          if (tab.hash === hash) tab.setAttribute('aria-current', 'page');
-          else tab.removeAttribute('aria-current');
-        }
-      };
-
-      const observer = new IntersectionObserver(
-        (entries) => {
-          for (const entry of entries) {
-            if (entry.isIntersecting) visible.add(`#${entry.target.id}`);
-            else visible.delete(`#${entry.target.id}`);
+        const activate = (hash: string) => {
+          for (const tab of tabs) {
+            if (tab.hash === hash) tab.setAttribute('aria-current', 'page');
+            else tab.removeAttribute('aria-current');
           }
-          const current = tabs.find((tab) => visible.has(tab.hash));
-          activate(current ? current.hash : defaultHash);
-        },
-        { rootMargin: '-35% 0px -55% 0px' }
-      );
+        };
 
-      for (const tab of tabs.slice(1)) {
-        const section = document.querySelector(tab.hash);
-        if (section) observer.observe(section);
-      }
+        const observer = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) visible.add(`#${entry.target.id}`);
+              else visible.delete(`#${entry.target.id}`);
+            }
+            const current = tabs.find((tab) => visible.has(tab.hash));
+            activate(current ? current.hash : defaultHash);
+          },
+          { rootMargin: '-35% 0px -55% 0px' }
+        );
 
-      // Theme toggle: flips between light and dark, starting from the
-      // effective theme (stored preference or system setting)
-      document.querySelector('#theme-toggle')?.addEventListener('click', () => {
-        const root = document.documentElement;
-        const systemDark = matchMedia('(prefers-color-scheme: dark)').matches;
-        const current = root.dataset.theme ?? (systemDark ? 'dark' : 'light');
-        const next = current === 'dark' ? 'light' : 'dark';
-        root.dataset.theme = next;
-        localStorage.setItem('theme', next);
+        for (const tab of tabs.slice(1)) {
+          const section = document.querySelector(tab.hash);
+          if (section) observer.observe(section);
+        }
+
+        // Theme toggle: flips between light and dark, starting from the
+        // effective theme (stored preference or system setting)
+        document.querySelector('#theme-toggle')?.addEventListener('click', () => {
+          const root = document.documentElement;
+          const systemDark = matchMedia('(prefers-color-scheme: dark)').matches;
+          const current = root.dataset.theme ?? (systemDark ? 'dark' : 'light');
+          const next = current === 'dark' ? 'light' : 'dark';
+          root.dataset.theme = next;
+          localStorage.setItem('theme', next);
+        });
+      };
+      document.addEventListener('astro:page-load', initPage);
+
+      // The router swaps <html> attributes on navigation, which would drop a
+      // manually chosen theme — re-apply it right after each swap.
+      document.addEventListener('astro:after-swap', () => {
+        const stored = localStorage.getItem('theme');
+        if (stored === 'light' || stored === 'dark') {
+          document.documentElement.dataset.theme = stored;
+        }
+      });
+
+      // GitHub-style top progress bar: crawl while the next page is being
+      // fetched, then snap to 100% and fade out when it's ready.
+      const loader = document.getElementById('page-loader');
+      document.addEventListener('astro:before-preparation', () => {
+        if (!loader) return;
+        loader.dataset.loading = 'true';
+        loader.style.transition = 'none';
+        loader.style.width = '0';
+        loader.style.opacity = '1';
+        void loader.offsetWidth; // flush so the crawl animates from 0
+        loader.style.transition = 'width 4s cubic-bezier(0.05, 0.6, 0.1, 1)';
+        loader.style.width = '82%';
+      });
+      document.addEventListener('astro:page-load', () => {
+        if (!loader || loader.dataset.loading !== 'true') return;
+        delete loader.dataset.loading;
+        loader.style.transition = 'width 0.2s ease, opacity 0.3s ease 0.25s';
+        loader.style.width = '100%';
+        loader.style.opacity = '0';
       });
     </script>
   </body>

@@ -81,26 +81,32 @@ const languages = [...new Set(projects.map((project) => project.language))].sort
   </div>
 
   <script>
-    const search = document.querySelector<HTMLInputElement>('#project-search');
-    const lang = document.querySelector<HTMLSelectElement>('#project-lang');
-    const rows = [...document.querySelectorAll<HTMLElement>('.project-row')];
-    const empty = document.querySelector<HTMLElement>('#no-results');
+    // Re-runs after every client-side navigation; bails out when the
+    // current page is not the Projects page.
+    document.addEventListener('astro:page-load', () => {
+      const search = document.querySelector<HTMLInputElement>('#project-search');
+      const lang = document.querySelector<HTMLSelectElement>('#project-lang');
+      if (!search || !lang) return;
 
-    const applyFilter = () => {
-      const query = (search?.value ?? '').trim().toLowerCase();
-      const language = lang?.value ?? 'all';
-      let visible = 0;
-      for (const row of rows) {
-        const matches =
-          (row.dataset.search ?? '').includes(query) &&
-          (language === 'all' || row.dataset.lang === language);
-        row.hidden = !matches;
-        if (matches) visible++;
-      }
-      if (empty) empty.hidden = visible > 0;
-    };
+      const rows = [...document.querySelectorAll<HTMLElement>('.project-row')];
+      const empty = document.querySelector<HTMLElement>('#no-results');
 
-    search?.addEventListener('input', applyFilter);
-    lang?.addEventListener('change', applyFilter);
+      const applyFilter = () => {
+        const query = search.value.trim().toLowerCase();
+        const language = lang.value;
+        let visible = 0;
+        for (const row of rows) {
+          const matches =
+            (row.dataset.search ?? '').includes(query) &&
+            (language === 'all' || row.dataset.lang === language);
+          row.hidden = !matches;
+          if (matches) visible++;
+        }
+        if (empty) empty.hidden = visible > 0;
+      };
+
+      search.addEventListener('input', applyFilter);
+      lang.addEventListener('change', applyFilter);
+    });
   </script>
 </BaseLayout>
