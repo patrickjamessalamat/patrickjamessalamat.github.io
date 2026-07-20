@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { experience } from '../data/experience';
+import { site } from '../data/site';
+
+const work = experience.filter((entry) => entry.kind === 'work');
+const education = experience.filter((entry) => entry.kind === 'education');
+
+const groups = [
+  { title: 'work', entries: work },
+  { title: 'education', entries: education },
+];
+---
+
+<BaseLayout title={`Experience · ${site.name}`} description={`Where ${site.name} has worked and studied.`}>
+  <div class="mx-auto max-w-[1012px] px-4 py-6">
+    <div class="border-b border-line pb-4">
+      <h1 class="text-xl font-semibold">Experience</h1>
+      <p class="mt-1 text-sm text-muted">Where I’ve worked and studied.</p>
+    </div>
+    <div class="mt-6 grid grid-cols-1 items-start gap-4 md:grid-cols-2">
+      {groups.map((group) => (
+        <div class="box">
+          <div class="box-header">{group.title}.md</div>
+          <div class="box-body">
+            <ol class="grid gap-5 border-l-2 border-line">
+              {group.entries.map((entry) => (
+                <li class="relative pl-5 before:absolute before:-left-1.5 before:top-[5px] before:h-2.5 before:w-2.5 before:rounded-full before:border-2 before:border-canvas before:bg-success before:content-['']">
+                  <p class="font-mono text-xs text-muted">{entry.period}</p>
+                  <h2 class="text-base font-semibold">{entry.title}</h2>
+                  <p class="text-[13px] font-medium text-accent">{entry.organization}</p>
+                  <p class="mt-1 text-[13px] text-muted">{entry.description}</p>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</BaseLayout>

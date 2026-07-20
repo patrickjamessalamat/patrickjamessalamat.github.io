@@ -25,34 +25,22 @@ const icons = {
 
 const base = import.meta.env.BASE_URL;
 
-// On the Projects page the anchor tabs point back to the home page; on the
-// home page they are in-page anchors tracked by the scroll observer.
-const isProjectsPage = Astro.url.pathname.replace(/\/$/, '').endsWith('/projects');
+// Every tab is its own page; the current one is derived from the URL.
+const path = Astro.url.pathname.replace(/\/$/, '');
+const home = base.replace(/\/$/, '');
 
 const tabs = [
-  {
-    href: isProjectsPage ? base : '#overview',
-    label: 'Overview',
-    icon: icons.book,
-    anchor: !isProjectsPage,
-    current: !isProjectsPage,
-  },
+  { href: base, label: 'Overview', icon: icons.book, current: path === home },
   {
     href: `${base}projects/`,
     label: 'Projects',
     icon: icons.table,
     count: projects.length,
-    anchor: false,
-    current: isProjectsPage,
+    current: path.endsWith('/projects'),
   },
-  { href: isProjectsPage ? `${base}#skills` : '#skills', label: 'Skills', icon: icons.zap, anchor: !isProjectsPage },
-  {
-    href: isProjectsPage ? `${base}#experience` : '#experience',
-    label: 'Experience',
-    icon: icons.briefcase,
-    anchor: !isProjectsPage,
-  },
-  { href: isProjectsPage ? `${base}#contact` : '#contact', label: 'Contact', icon: icons.mail, anchor: !isProjectsPage },
+  { href: `${base}stacks/`, label: 'Stacks', icon: icons.zap, current: path.endsWith('/stacks') },
+  { href: `${base}experience/`, label: 'Experience', icon: icons.briefcase, current: path.endsWith('/experience') },
+  { href: `${base}contact/`, label: 'Contact', icon: icons.mail, current: path.endsWith('/contact') },
 ];
 ---
 
@@ -122,7 +110,6 @@ const tabs = [
           <a
             href={tab.href}
             class="flex items-center gap-2 whitespace-nowrap border-b-2 border-transparent px-3 pb-2.5 pt-2 text-sm leading-[23px] text-[#e6edf3] hover:border-[#30363d] hover:no-underline aria-[current=page]:border-[#f78166] aria-[current=page]:font-semibold"
-            data-tab={tab.anchor ? 'true' : undefined}
             aria-current={tab.current ? 'page' : undefined}
           >
             <svg class="shrink-0 fill-[#9198a1]" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
@@ -152,37 +139,6 @@ const tabs = [
       // Runs on initial load AND after every client-side navigation, since
       // the ClientRouter swaps the body and all element listeners with it.
       const initPage = () => {
-        // Highlight the tab of the section currently in view. Overview is
-        // the default: it wraps the whole page, so it is excluded from
-        // observation and used as the fallback when no section is in view.
-        const tabs = [...document.querySelectorAll<HTMLAnchorElement>('[data-tab]')];
-        const defaultHash = tabs[0]?.hash ?? '#overview';
-        const visible = new Set<string>();
-
-        const activate = (hash: string) => {
-          for (const tab of tabs) {
-            if (tab.hash === hash) tab.setAttribute('aria-current', 'page');
-            else tab.removeAttribute('aria-current');
-          }
-        };
-
-        const observer = new IntersectionObserver(
-          (entries) => {
-            for (const entry of entries) {
-              if (entry.isIntersecting) visible.add(`#${entry.target.id}`);
-              else visible.delete(`#${entry.target.id}`);
-            }
-            const current = tabs.find((tab) => visible.has(tab.hash));
-            activate(current ? current.hash : defaultHash);
-          },
-          { rootMargin: '-35% 0px -55% 0px' }
-        );
-
-        for (const tab of tabs.slice(1)) {
-          const section = document.querySelector(tab.hash);
-          if (section) observer.observe(section);
-        }
-
         // Theme toggle: flips between light and dark, starting from the
         // effective theme (stored preference or system setting)
         document.querySelector('#theme-toggle')?.addEventListener('click', () => {
