@@ -16,4 +16,5 @@ export const site = {
     { label: 'LinkedIn', url: 'https://www.linkedin.com/' }, // TODO: add your profile
   ],
   resumeFile: 'resume.pdf', // lives in public/
+  avatar: 'images/avatar.png', // lives in public/
 };

@@ -2,20 +2,16 @@
 import { site } from '../data/site';
 
 const base = import.meta.env.BASE_URL;
-const initials = site.name
-  .split(' ')
-  .map((part) => part.charAt(0))
-  .slice(0, 2)
-  .join('');
 ---
 
 <aside class="flex flex-col gap-4">
-  <div
-    class="flex aspect-square w-[min(260px,60vw)] items-center justify-center rounded-full border border-line bg-linear-to-br from-btn-green to-accent text-[clamp(3rem,12vw,5rem)] font-bold tracking-wide text-white"
-    aria-hidden="true"
-  >
-    {initials}
-  </div>
+  <img
+    class="aspect-square w-[min(260px,60vw)] rounded-full border border-line object-cover"
+    src={`${base}${site.avatar}`}
+    alt={`Photo of ${site.name}`}
+    width="460"
+    height="460"
+  />
   <div>
     <h1 class="text-2xl font-semibold leading-tight">{site.name}</h1>
     <p class="text-lg font-light text-muted">{site.handle} · {site.role}</p>
