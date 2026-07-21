@@ -34,7 +34,12 @@ const fallbackIcon = {
     </div>
   </div>
   <p class="text-base">{site.tagline}</p>
-  <a class="btn btn-primary flex w-full" href={`${base}${site.resumeFile}`} download>
+  <a
+    class="btn btn-primary flex w-full"
+    href={`${base}${site.resumeFile}`}
+    download
+    data-analytics="resume_download"
+  >
     Download resume
   </a>
   <ul class="grid gap-2 text-sm">
