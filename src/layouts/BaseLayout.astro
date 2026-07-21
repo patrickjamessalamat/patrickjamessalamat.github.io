@@ -139,15 +139,23 @@ const personSchema = {
           }
           gtag('js', new Date());
 
-          // The ClientRouter navigates without a full reload, so GA's automatic
-          // page_view would only ever fire once. Disable it and send our own on
-          // astro:page-load, which also covers the very first load.
-          gtag('config', gaId, { send_page_view: false });
+          // Let gtag send the first page_view itself. That hit must not depend
+          // on astro:page-load reaching us, or a single failure there means GA
+          // records nothing at all.
+          gtag('config', gaId);
 
           if (!window.__gaInit) {
             window.__gaInit = true;
 
+            // The ClientRouter navigates without a reload, so gtag never sees
+            // later pages. Send those manually — skipping the first event,
+            // which gtag('config', …) has already reported.
+            let isFirstLoad = true;
             document.addEventListener('astro:page-load', () => {
+              if (isFirstLoad) {
+                isFirstLoad = false;
+                return;
+              }
               gtag('event', 'page_view', {
                 page_title: document.title,
                 page_location: location.href,
