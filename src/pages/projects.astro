@@ -4,6 +4,24 @@ import { languageColors, projects } from '../data/projects';
 import { site } from '../data/site';
 
 const languages = [...new Set(projects.map((project) => project.language))].sort();
+
+// Flatten every bit of text a project carries — including sub-project names and
+// paragraphs — so the search box matches on all of it. Descriptions may contain
+// inline HTML, so tags are stripped: otherwise "href" or "noopener" would match.
+const rows = projects.map((project) => ({
+  project,
+  search: [
+    project.title,
+    ...(project.description ?? []),
+    ...(project.items ?? []).flatMap((item) => [item.name, ...item.description, ...(item.tags ?? [])]),
+    ...project.tags,
+  ]
+    .join(' ')
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLowerCase(),
+}));
 ---
 
 <BaseLayout
@@ -31,13 +49,13 @@ const languages = [...new Set(projects.map((project) => project.language))].sort
     </div>
 
     <ul>
-      {projects.map((project) => (
+      {rows.map(({ project, search }) => (
         <li
           class="project-row border-b border-line py-6"
-          data-search={`${project.title} ${project.description} ${project.tags.join(' ')}`.toLowerCase()}
+          data-search={search}
           data-lang={project.language}
         >
-          <div class="flex items-center gap-2">
+          <div class="flex flex-wrap items-center gap-2">
             <h2 class="text-xl font-semibold">
               {project.repoUrl || project.demoUrl ? (
                 <a href={project.repoUrl ?? project.demoUrl} target="_blank" rel="noopener noreferrer">
@@ -47,9 +65,52 @@ const languages = [...new Set(projects.map((project) => project.language))].sort
                 project.title
               )}
             </h2>
-            <span class="rounded-full border border-line px-[7px] text-xs leading-[18px] text-muted">Public</span>
+            <span class="rounded-full border border-line px-[7px] text-xs leading-[18px] text-muted">{project.visibility ?? 'Public'}</span>
+            {project.items && project.items.length > 0 && (
+              <span class="rounded-full border border-line px-[7px] text-xs leading-[18px] text-muted">
+                {project.items.length} {project.items.length === 1 ? 'project' : 'projects'}
+              </span>
+            )}
           </div>
-          <p class="mt-1 max-w-[640px] text-sm text-muted">{project.description}</p>
+          <div class="mt-1 grid max-w-[640px] gap-2">
+            {project.description?.map((paragraph) => (
+              <p class="text-sm text-muted" set:html={paragraph} />
+            ))}
+          </div>
+          {/* Nested timeline, matching the multi-role companies on the Experience page */}
+          {project.items && project.items.length > 0 && (
+            <ol class="mt-3 grid max-w-[664px] gap-6 border-l border-line pl-6">
+              {project.items.map((item) => (
+                <li class="relative grid gap-2 before:absolute before:-left-[27px] before:top-1.5 before:h-2.5 before:w-2.5 before:rounded-full before:border-2 before:border-canvas before:bg-muted before:content-['']">
+                  <div class="flex flex-wrap items-center gap-2">
+                    <h3 class="text-sm font-semibold">
+                      {item.demoUrl ? (
+                        <a href={item.demoUrl} target="_blank" rel="noopener noreferrer">{item.name}</a>
+                      ) : (
+                        item.name
+                      )}
+                    </h3>
+                    {item.visibility && (
+                      <span class="rounded-full border border-line px-[7px] text-xs leading-[18px] text-muted">{item.visibility}</span>
+                    )}
+                    {item.repoUrl && (
+                      <a class="text-xs font-medium text-muted" href={item.repoUrl} target="_blank" rel="noopener noreferrer">Source</a>
+                    )}
+                  </div>
+                  {item.description.map((paragraph) => (
+                    <p class="text-sm text-muted" set:html={paragraph} />
+                  ))}
+                  {item.tags && item.tags.length > 0 && (
+                    <ul class="flex flex-wrap gap-1.5">
+                      {item.tags.map((tag) => (
+                        <li class="topic">{tag}</li>
+                      ))}
+                    </ul>
+                  )}
+                </li>
+              ))}
+            </ol>
+          )}
           <ul class="mt-2 flex flex-wrap gap-1.5">
             {project.tags.map((tag) => (
               <li class="topic">{tag}</li>
@@ -64,9 +125,6 @@ const languages = [...new Set(projects.map((project) => project.language))].sort
               ></span>
               {project.language}
             </span>
-            {project.demoUrl && (
-              <a class="font-medium" href={project.demoUrl} target="_blank" rel="noopener noreferrer">Live demo</a>
-            )}
             {project.repoUrl && (
               <a class="font-medium" href={project.repoUrl} target="_blank" rel="noopener noreferrer">Source</a>
             )}

@@ -99,16 +99,14 @@ export const experience: ExperienceEntry[] = [
       },
     ],
   },
-  {
-    // TODO: replace with your real education
-    organization: 'Your University',
-    location: 'Philippines',
+  {    
+    organization: 'University of Nueva Caceres',
+    location: 'Naga, Bicol Region, Philippines',
     kind: 'education',
     roles: [
       {
         title: 'B.S. in Computer Science',
-        period: '2018 — 2022',
-        description: ['Replace with your degree, school, and any honors or notable coursework.'],
+        period: '2014 — 2017',        
       },
     ],
   },

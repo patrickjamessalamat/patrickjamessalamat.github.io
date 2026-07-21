@@ -30,7 +30,10 @@ export const skills: SkillGroup[] = [
       'MS SQL',
       'PostgreSQL',
       'MySQL',
+      'Redis',
       'C#',
+      'NHibernate',
+      'Entity Framework Core',
       'VB.NET',
       'VB6',
       'Java',
@@ -66,6 +69,6 @@ export const skills: SkillGroup[] = [
   },
   {
     category: 'CMS',
-    items: ['Umbraco', 'WordPress'],
+    items: ['Umbraco', 'Orchard Core', 'WordPress'],
   },
 ];
