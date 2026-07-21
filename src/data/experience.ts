@@ -54,6 +54,9 @@ export const experience: ExperienceEntry[] = [
           'Azure',
           'AKS',
           'Docker',
+          'GitHub Actions',
+          'Analytics',
+          'SEO'
         ],
       },
     ],

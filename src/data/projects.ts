@@ -119,7 +119,7 @@ export const projects: Project[] = [
       },
     ],    
     language: 'C#',
-    tags: ['umbraco', 'c#', 'mvc',  'ef core', 'jquery', 'tailwind', 'vanilla.js', 'azure', 'aks', 'docker', 'css', 'html', 'javascript'],
+    tags: ['umbraco', 'c#', 'mvc',  'ef core', 'jquery', 'tailwind', 'vanilla.js', 'azure', 'aks', 'docker', 'css', 'html', 'javascript', 'analytics', 'seo'],
     pinned: true,
   },
   {

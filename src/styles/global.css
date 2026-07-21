@@ -100,6 +100,25 @@
   }
 }
 
+/* Circular theme reveal. Scoped to [data-theme-switch] so the ClientRouter's
+   own page-navigation transitions keep their default cross-fade — a bare
+   ::view-transition-old(root) rule here would disable those too.
+   The snapshots are stacked instead of cross-faded, and the JS clips the new
+   one into an expanding circle centred on the toggle button. */
+:root[data-theme-switch]::view-transition-old(root),
+:root[data-theme-switch]::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+:root[data-theme-switch]::view-transition-old(root) {
+  z-index: 0;
+}
+
+:root[data-theme-switch]::view-transition-new(root) {
+  z-index: 1;
+}
+
 @theme inline {
   --color-canvas: var(--canvas);
   --color-canvas-subtle: var(--canvas-subtle);
@@ -137,10 +156,21 @@
 
   a {
     @apply text-accent;
+    transition: color 150ms ease;
   }
 
+  /* Shifts the accent toward the foreground colour, so it reads as "hover" in
+     both themes: darker blue on light, lighter blue on dark. */
   a:hover {
+    color: color-mix(in srgb, var(--accent-default) 80%, var(--fg-default));
     text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    a {
+      transition: none;
+    }
   }
 
   svg {
