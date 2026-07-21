@@ -1,0 +1,181 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { languageColors, projectCount, projects } from '../data/projects';
+import { site } from '../data/site';
+
+const languages = [...new Set(projects.map((project) => project.language))].sort();
+
+// Flatten every bit of text a project carries — including sub-project names and
+// paragraphs — so the search box matches on all of it. Descriptions may contain
+// inline HTML, so tags are stripped: otherwise "href" or "noopener" would match.
+const rows = projects.map((project) => ({
+  project,
+  search: [
+    project.title,
+    ...(project.description ?? []),
+    ...(project.items ?? []).flatMap((item) => [item.name, ...item.description, ...(item.tags ?? [])]),
+    ...project.tags,
+  ]
+    .join(' ')
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLowerCase(),
+}));
+---
+
+<BaseLayout
+  title={`Projects · ${site.name}`}
+  description={`All projects by ${site.name}.`}
+>
+  <div class="mx-auto max-w-[1012px] px-4 py-6">
+    <div class="flex flex-wrap items-baseline justify-between gap-2 border-b border-line pb-4">
+      <div>
+        <h1 class="text-xl font-semibold">Projects</h1>
+        <p class="mt-1 text-sm text-muted">Things I’ve built at work and on my own.</p>
+      </div>
+      <p class="text-sm text-muted">
+        <span class="font-semibold text-fg">{projectCount}</span> projects ·
+        <span class="font-semibold text-fg">{languages.length}</span> languages
+      </p>
+    </div>
+
+    <!-- Filter bar, like GitHub's Repositories tab -->
+    <div class="mt-4 flex flex-wrap gap-2 border-b border-line pb-4">
+      <input
+        id="project-search"
+        type="search"
+        placeholder="Find a project…"
+        autocomplete="off"
+        class="min-w-48 flex-1 rounded-md border border-line bg-canvas px-3 py-[5px] text-sm placeholder:text-muted focus:border-accent focus:outline-none"
+      />
+      <select
+        id="project-lang"
+        aria-label="Filter by language"
+        class="cursor-pointer rounded-md border border-line bg-canvas-subtle px-3 py-[5px] text-sm font-medium"
+      >
+        <option value="all">All languages</option>
+        {languages.map((language) => <option value={language}>{language}</option>)}
+      </select>
+    </div>
+
+    <ul>
+      {rows.map(({ project, search }) => (
+        <li
+          class="project-row border-b border-line py-6"
+          data-search={search}
+          data-lang={project.language}
+        >
+          <div class="flex flex-wrap items-center gap-2">
+            <h2 class="text-xl font-semibold">
+              {project.repoUrl || project.demoUrl ? (
+                <a href={project.repoUrl ?? project.demoUrl} target="_blank" rel="noopener noreferrer">
+                  {project.title}
+                </a>
+              ) : (
+                project.title
+              )}
+            </h2>
+            <span class="rounded-full border border-line px-[7px] text-xs leading-[18px] text-muted">{project.visibility ?? 'Public'}</span>
+            {project.items && project.items.length > 0 && (
+              <span class="rounded-full border border-line px-[7px] text-xs leading-[18px] text-muted">
+                {project.items.length} {project.items.length === 1 ? 'project' : 'projects'}
+              </span>
+            )}
+          </div>
+          <div class="mt-1 grid max-w-[640px] gap-2">
+            {project.description?.map((paragraph) => (
+              <p class="text-sm text-muted" set:html={paragraph} />
+            ))}
+          </div>
+          {/* Nested timeline, matching the multi-role companies on the Experience page */}
+          {project.items && project.items.length > 0 && (
+            <ol class="mt-3 grid max-w-[664px] gap-6 border-l border-line pl-6">
+              {project.items.map((item) => (
+                <li class="relative grid gap-2 before:absolute before:-left-[27px] before:top-1.5 before:h-2.5 before:w-2.5 before:rounded-full before:border-2 before:border-canvas before:bg-muted before:content-['']">
+                  <div class="flex flex-wrap items-center gap-2">
+                    <h3 class="text-sm font-semibold">
+                      {item.demoUrl ? (
+                        <a href={item.demoUrl} target="_blank" rel="noopener noreferrer">{item.name}</a>
+                      ) : (
+                        item.name
+                      )}
+                    </h3>
+                    {item.visibility && (
+                      <span class="rounded-full border border-line px-[7px] text-xs leading-[18px] text-muted">{item.visibility}</span>
+                    )}
+                    {item.repoUrl && (
+                      <a class="text-xs font-medium text-muted" href={item.repoUrl} target="_blank" rel="noopener noreferrer">Source</a>
+                    )}
+                  </div>
+                  {item.description.map((paragraph) => (
+                    <p class="text-sm text-muted" set:html={paragraph} />
+                  ))}
+                  {item.tags && item.tags.length > 0 && (
+                    <ul class="flex flex-wrap gap-1.5">
+                      {item.tags.map((tag) => (
+                        <li class="topic">{tag}</li>
+                      ))}
+                    </ul>
+                  )}
+                </li>
+              ))}
+            </ol>
+          )}
+          <ul class="mt-2 flex flex-wrap gap-1.5">
+            {project.tags.map((tag) => (
+              <li class="topic">{tag}</li>
+            ))}
+          </ul>
+          <div class="mt-3 flex items-center gap-4 text-xs text-muted">
+            <span class="inline-flex items-center gap-[5px]">
+              <span
+                class="inline-block h-3 w-3 rounded-full"
+                style={`background:${languageColors[project.language] ?? '#8b949e'}`}
+                aria-hidden="true"
+              ></span>
+              {project.language}
+            </span>
+            {project.repoUrl && (
+              <a class="font-medium" href={project.repoUrl} target="_blank" rel="noopener noreferrer">Source</a>
+            )}
+          </div>
+        </li>
+      ))}
+    </ul>
+
+    <p id="no-results" hidden class="py-8 text-center text-muted">
+      No projects match your search.
+    </p>
+  </div>
+
+  <script>
+    // Re-runs after every client-side navigation; bails out when the
+    // current page is not the Projects page.
+    document.addEventListener('astro:page-load', () => {
+      const search = document.querySelector<HTMLInputElement>('#project-search');
+      const lang = document.querySelector<HTMLSelectElement>('#project-lang');
+      if (!search || !lang) return;
+
+      const rows = [...document.querySelectorAll<HTMLElement>('.project-row')];
+      const empty = document.querySelector<HTMLElement>('#no-results');
+
+      const applyFilter = () => {
+        const query = search.value.trim().toLowerCase();
+        const language = lang.value;
+        let visible = 0;
+        for (const row of rows) {
+          const matches =
+            (row.dataset.search ?? '').includes(query) &&
+            (language === 'all' || row.dataset.lang === language);
+          row.hidden = !matches;
+          if (matches) visible++;
+        }
+        if (empty) empty.hidden = visible > 0;
+      };
+
+      search.addEventListener('input', applyFilter);
+      lang.addEventListener('change', applyFilter);
+    });
+  </script>
+</BaseLayout>

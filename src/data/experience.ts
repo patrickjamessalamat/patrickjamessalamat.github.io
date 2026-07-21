@@ -1,34 +1,190 @@
-export interface ExperienceEntry {
+// A company can hold one or more roles (LinkedIn-style). Single-role
+// companies render as a flat card; multi-role companies render as a
+// grouped header with a nested timeline of positions.
+export interface Role {
   title: string;
+  employmentType?: string; // e.g. Full-time, Part-time, Contract
+  period: string; // e.g. "Jun 2019 — Oct 2022"
+  duration?: string; // e.g. "3 yrs 5 mos"
+  workMode?: string; // e.g. Hybrid, Remote, On-site
+  description?: string[]; // one string per paragraph
+  skills?: string[];
+}
+
+export interface ExperienceEntry {
   organization: string;
-  period: string;
-  description: string;
+  headline?: string; // overarching title for multi-role companies, e.g. "Software Developer"
+  tenure?: string; // total time across all roles, e.g. "8 yrs 1 mo"
+  location?: string;
+  roles: Role[];
   kind: 'work' | 'education';
 }
 
-// TODO: replace with your real experience and education
 export const experience: ExperienceEntry[] = [
   {
-    title: 'Software Engineer',
-    organization: 'Your Company',
-    period: '2024 — Present',
-    description:
-      'Building web applications and AI-powered tools. Replace this with a short summary of what you do and your impact.',
+    organization: 'Inchcape Digital',
+    location: 'Ortigas Center, Pasig, Metro Manila',
     kind: 'work',
+    roles: [
+      {
+        title: 'Senior Full-Stack .NET Engineer',
+        employmentType: 'Full-time',
+        period: 'Jan 2024 — Present',
+        description: [
+          'Lead the development of a new Umbraco CMS template designed to be fully customizable and configurable for different automotive markets. Also serve as the Lead Backend Engineer for a SaaS deployment platform that streamlines the delivery and management of newly developed CMS websites.',
+          'Guide and mentor junior engineers in developing CMS websites for globally recognized automotive brands. Promote a strong engineering culture by encouraging the team to follow the Software Development Life Cycle (SDLC), apply proven software design principles, maintain high coding standards, and participate in peer code reviews.',
+          'Maintain legacy websites and improve their performance, scalability, and maintainability by modernizing their architecture and redesigning existing implementations.',
+        ],
+        // Covers DXP+ Control Panel and the CMS Projects group
+        skills: [
+          '.NET Core',
+          'C# 8',
+          'Umbraco 13',
+          'MVC',
+          'Entity Framework Core',
+          'MS SQL',
+          'PostgreSQL',
+          'REST API',
+          'React',
+          'TypeScript',
+          'Vite',
+          'Tailwind CSS',
+          'jQuery',
+          'Vanilla JS',
+          'Azure',
+          'AKS',
+          'Docker',
+          'GitHub Actions',
+          'Analytics',
+          'SEO'
+        ],
+      },
+    ],
   },
   {
-    title: 'Freelance Developer',
-    organization: 'Self-employed',
-    period: '2022 — 2024',
-    description:
-      'Delivered websites and automation tools for small businesses. Replace with your own highlights.',
+    organization: 'Global Health Limited',
+    location: 'Melbourne, VIC, Australia',
     kind: 'work',
+    roles: [
+      {
+        title: 'L3 Support Engineer / Full Stack .NET Developer',
+        employmentType: 'Contract',
+        period: 'Oct 2022 — Sep 2024',
+        description: [
+          'Supported and enhanced enterprise SaaS healthcare applications used by healthcare organizations across Australia. Investigated and resolved complex application defects and production incidents, performed root-cause analysis, and implemented reliable solutions to improve system stability and performance.',
+          'Designed and developed new features across the application stack while following established software engineering practices and the SDLC. Collaborated with cross-functional teams through technical design reviews, peer code reviews, testing, and controlled releases to ensure each solution was secure, maintainable, and production-ready.',
+        ],
+        // Covers MasterCare+ AU
+        skills: [
+          '.NET Core',
+          'C#',
+          'Java',
+          'MVC',
+          'NHibernate',
+          'MS SQL',
+          'Redis',
+          'REST API',
+          'SOAP API',
+          'Kendo UI',
+          'Knockout.js',
+          'Vue.js',
+          'Vanilla JS',
+        ],
+      },
+    ],
   },
   {
-    title: 'B.S. in Computer Science',
-    organization: 'Your University',
-    period: '2018 — 2022',
-    description: 'Replace with your degree, school, and any honors or notable coursework.',
+    organization: 'University of Nueva Caceres',
+    headline: 'Software Developer',
+    tenure: '8 yrs 1 mo',
+    location: 'Naga, Bicol Region, Philippines',
+    kind: 'work',
+    roles: [
+      {
+        title: 'Technical Consultant',
+        employmentType: 'Part-time',
+        period: 'Oct 2022 — Jun 2025',
+        duration: '2 yrs 9 mos',
+        workMode: 'Hybrid',
+        description: [
+          'Provided ongoing technical consultation, maintenance, and support for all applications developed during my tenure at the university. Ensured that each system remained reliable, secure, and aligned with evolving operational requirements.',
+          'Investigated and resolved technical issues, implemented system enhancements, optimized application performance, and supported integrations with existing and third-party systems. Collaborated with university departments to assess new requirements, recommend practical solutions, and maintain the long-term stability and usability of business-critical applications.',
+        ],
+        // Maintaining the systems built during the earlier UNC roles
+        skills: [
+          'C#',
+          'VB.NET',
+          'Web Forms',
+          'Win Forms',
+          'MS SQL',
+          'SQLite',
+          'Dapper ORM',
+          'REST API',
+          'Salesforce',
+        ],
+      },
+      {
+        title: 'Programmer',
+        employmentType: 'Full-time',
+        period: 'Jun 2019 — Oct 2022',
+        duration: '3 yrs 5 mos',
+        description: [
+          'Designed, developed, and maintained business-critical applications that supported key university operations. These included an HR biometric attendance system for monitoring employee time records and an RFID-based identification system with automated SMS notifications, helping improve operational efficiency and communication across the university.',
+          'Pioneered the modernization of the university’s legacy LAN-based enrollment system by transforming it into an accessible Online Enrollment System. Implemented third-party integrations to extend the platform’s capabilities and support a more efficient enrollment experience for students and university personnel.',
+          'Participated throughout the software development lifecycle, including requirements analysis, system design, development, testing, deployment, troubleshooting, and ongoing application support. Collaborated with university departments to understand their processes and deliver practical software solutions aligned with their operational needs.',
+        ],
+        // Covers UNC OES, GEMS, and PATS 2.0
+        skills: [
+          'C#',
+          'Web Forms',
+          'Win Forms',
+          'MS SQL',
+          'SQLite',
+          'Dapper ORM',
+          'REST API',
+          'Salesforce',
+          'RFID',
+          'Biometrics',
+          'SMS API',
+          'JavaScript',
+          'Bootstrap',
+          'CSS',
+          'HTML',
+        ],
+      },
+      {
+        title: 'Junior Programmer',
+        employmentType: 'Full-time',
+        period: 'Jun 2017 — Jun 2019',
+        duration: '2 yrs 1 mo',
+        description: [
+          'Supported the installation, configuration, and maintenance of legacy applications used during university enrollment periods.',
+          'Modernized a LAN-based application into a web application for the University Guidance Office, improving the accessibility and management of student information records.',
+        ],
+        // Covers SII: Student Individual Inventory
+        skills: [
+          'VB.NET',
+          'ASP.NET',
+          'Web Forms',
+          'Win Forms',
+          'MS SQL',
+          'JavaScript',
+          'Bootstrap',
+          'CSS',
+          'HTML',
+        ],
+      },
+    ],
+  },
+  {    
+    organization: 'University of Nueva Caceres',
+    location: 'Naga, Bicol Region, Philippines',
     kind: 'education',
+    roles: [
+      {
+        title: 'B.S. in Computer Science',
+        period: '2014 — 2017',        
+      },
+    ],
   },
 ];

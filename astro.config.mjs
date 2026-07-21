@@ -1,9 +1,13 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import tailwindcss from '@tailwindcss/vite';
 
-// Deployed to GitHub Pages as a project page, so the site is served
-// under /my-portfolio-app. When moving to Vercel/Cloudflare, remove `base`.
+// Served from the domain root. On GitHub Pages this requires the repo to be
+// named patrickjamessalamat.github.io (a user site); Vercel/Cloudflare need
+// no changes.
 export default defineConfig({
   site: 'https://patrickjamessalamat.github.io',
-  base: '/my-portfolio-app/',
+  vite: {
+    plugins: [tailwindcss()],
+  },
 });

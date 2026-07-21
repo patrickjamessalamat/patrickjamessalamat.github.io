@@ -1,89 +1,66 @@
 ---
-import type { Project } from '../data/projects';
+import { languageColors, type Project } from '../data/projects';
 
 interface Props {
   project: Project;
 }
 
 const { project } = Astro.props;
-const base = import.meta.env.BASE_URL;
+
+const dotColor = languageColors[project.language] ?? '#8b949e';
+const titleUrl = project.repoUrl ?? project.demoUrl;
+const visibility = project.visibility ?? 'Public';
+const itemCount = project.items?.length ?? 0;
 ---
 
-<article class="card">
-  {project.image && (
-    <img src={`${base}${project.image}`} alt={`Screenshot of ${project.title}`} loading="lazy" />
-  )}
-  <div class="card-body">
-    <h3>{project.title}</h3>
-    <p>{project.description}</p>
-    <ul class="tags">
-      {project.tags.map((tag) => (
-        <li class="tag">{tag}</li>
-      ))}
-    </ul>
-    <div class="links">
-      {project.demoUrl && (
-        <a href={project.demoUrl} target="_blank" rel="noopener noreferrer">Live demo ↗</a>
-      )}
-      {project.repoUrl && (
-        <a href={project.repoUrl} target="_blank" rel="noopener noreferrer">Source ↗</a>
-      )}
-    </div>
+<article class="box box-interactive flex flex-col gap-2 p-4">
+  <div class="flex flex-wrap items-center gap-2 text-sm">
+    <svg class="shrink-0 fill-muted" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+      <path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8Z"/>
+    </svg>
+    {titleUrl ? (
+      <a class="font-semibold" href={titleUrl} target="_blank" rel="noopener noreferrer">{project.title}</a>
+    ) : (
+      <span class="font-semibold">{project.title}</span>
+    )}
+    <span class="rounded-full border border-line px-[7px] text-xs leading-[18px] text-muted">{visibility}</span>
+    {itemCount > 0 && (
+      <span class="rounded-full border border-line px-[7px] text-xs leading-[18px] text-muted">
+        {itemCount} {itemCount === 1 ? 'project' : 'projects'}
+      </span>
+    )}
+  </div>
+  <div class="flex flex-1 flex-col gap-2">
+    {project.description?.map((paragraph) => (
+      <p class="text-xs text-muted" set:html={paragraph} />
+    ))}
+    {/* Grouped entries list only their sub-project names here; the Projects page carries the detail. */}
+    {project.items && project.items.length > 0 && (
+      <ul class="grid gap-1.5 border-l border-line pl-4 text-xs text-muted">
+        {project.items.map((item) => (
+          <li class="relative before:absolute before:-left-[19px] before:top-[5px] before:h-1.5 before:w-1.5 before:rounded-full before:border-2 before:border-canvas before:bg-muted before:content-['']">
+            {item.repoUrl ?? item.demoUrl ? (
+              <a href={item.repoUrl ?? item.demoUrl} target="_blank" rel="noopener noreferrer">{item.name}</a>
+            ) : (
+              item.name
+            )}
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
+  <ul class="flex flex-wrap gap-1">
+    {project.tags.map((tag) => (
+      <li class="topic">{tag}</li>
+    ))}
+  </ul>
+  <div class="flex items-center gap-4 text-xs text-muted">
+    <span class="inline-flex items-center gap-[5px]">
+      <span class="inline-block h-2.5 w-2.5 rounded-full" style={`background:${dotColor}`} aria-hidden="true"></span>
+      {project.language}
+    </span>
+    {project.repoUrl && (
+      <a class="font-medium" href={project.repoUrl} target="_blank" rel="noopener noreferrer">Source</a>
+    )}
   </div>
 </article>
-
-<style>
-  .card {
-    background: var(--bg-alt);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    transition: transform 0.18s ease, box-shadow 0.18s ease;
-  }
-
-  .card:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow);
-  }
-
-  .card-body {
-    padding: 1.25rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    flex: 1;
-  }
-
-  h3 {
-    font-size: 1.15rem;
-    letter-spacing: -0.01em;
-  }
-
-  p {
-    color: var(--text-muted);
-    font-size: 0.95rem;
-    flex: 1;
-  }
-
-  .tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
-    list-style: none;
-  }
-
-  .links {
-    display: flex;
-    gap: 1rem;
-    font-size: 0.92rem;
-    font-weight: 600;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .card {
-      transition: none;
-    }
-  }
-</style>

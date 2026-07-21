@@ -1,5 +1,7 @@
 # build output
 dist/
+# generated from public/images/profile.png by scripts/make-favicon.mjs
+public/favicon.png
 # generated types
 .astro/
 

@@ -1,0 +1,71 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../data/site';
+
+const base = import.meta.env.BASE_URL;
+
+// Same octicon vocabulary the sidebar uses, plus a handset for the phone row.
+const icons = {
+  mail: 'M1 4.5A1.5 1.5 0 0 1 2.5 3h11A1.5 1.5 0 0 1 15 4.5v7a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 1 11.5Zm1.7-.2 5.3 4 5.3-4H2.7ZM14 5.8 8.6 9.9a1 1 0 0 1-1.2 0L2 5.8v5.7c0 .3.2.5.5.5h11c.3 0 .5-.2.5-.5Z',
+  phone: 'M5.75 1h4.5A1.75 1.75 0 0 1 12 2.75v10.5A1.75 1.75 0 0 1 10.25 15h-4.5A1.75 1.75 0 0 1 4 13.25V2.75A1.75 1.75 0 0 1 5.75 1Zm0 1.5a.25.25 0 0 0-.25.25v10.5c0 .14.11.25.25.25h4.5a.25.25 0 0 0 .25-.25V2.75a.25.25 0 0 0-.25-.25Zm2.25 9a.75.75 0 1 1 0 1.5.75.75 0 0 1 0-1.5Z',
+  location: 'M8 1a5 5 0 0 0-5 5c0 3.5 5 9 5 9s5-5.5 5-9a5 5 0 0 0-5-5Zm0 7a2 2 0 1 1 0-4 2 2 0 0 1 0 4Z',
+};
+
+// tel: needs the digits unspaced; the display value keeps its formatting.
+const details = [
+  { label: 'Email', icon: icons.mail, value: site.email, href: `mailto:${site.email}` },
+  { label: 'Phone', icon: icons.phone, value: site.phone, href: `tel:${site.phone.replace(/\s/g, '')}` },
+  { label: 'Location', icon: icons.location, value: site.location },
+];
+---
+
+<BaseLayout title={`Contact · ${site.name}`} description={`How to get in touch with ${site.name}.`}>
+  <div class="mx-auto max-w-[1012px] px-4 py-6">
+    <div class="border-b border-line pb-4">
+      <h1 class="text-xl font-semibold">Get in touch</h1>
+      <p class="mt-1 text-sm text-muted">
+        I’m open to opportunities, collaborations, and interesting conversations.
+      </p>
+    </div>
+
+    <div class="mt-6 box box-interactive">
+      <div class="box-header">
+        <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+          <path d={icons.mail} />
+        </svg>
+        {site.handle} / contact.md
+      </div>
+      <div class="box-body grid gap-6">
+        <p class="text-muted">The fastest way to reach me is by email — I usually reply within a day.</p>
+
+        <ul class="grid gap-4 sm:grid-cols-2">
+          {details.map((detail) => (
+            <li class="flex items-start gap-3">
+              <svg class="mt-[3px] shrink-0 fill-muted" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+                <path d={detail.icon} />
+              </svg>
+              <div class="grid min-w-0 gap-0.5">
+                <span class="font-mono text-xs text-muted">{detail.label}</span>
+                {detail.href ? (
+                  <a class="truncate text-sm" href={detail.href}>{detail.value}</a>
+                ) : (
+                  <span class="truncate text-sm">{detail.value}</span>
+                )}
+              </div>
+            </li>
+          ))}
+        </ul>
+
+        <div class="flex flex-wrap gap-2 border-t border-line-muted pt-5">
+          <a class="btn btn-primary" href={`mailto:${site.email}`}>Email me</a>
+          <a class="btn" href={`${base}${site.resumeFile}`} download>Download resume</a>
+          {site.socials.map((social) => (
+            <a class="btn" href={social.url} target="_blank" rel="noopener noreferrer">
+              {social.label}
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
