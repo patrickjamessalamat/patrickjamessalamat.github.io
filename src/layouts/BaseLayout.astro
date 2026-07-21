@@ -2,7 +2,8 @@
 import '../styles/global.css';
 import { ClientRouter } from 'astro:transitions';
 import { site } from '../data/site';
-import { projects } from '../data/projects';
+import { projectCount } from '../data/projects';
+import { credentials } from '../data/certifications';
 
 interface Props {
   title?: string;
@@ -21,13 +22,18 @@ const icons = {
   zap: 'M9.8.7a.5.5 0 0 1 .35.6L9.1 6h3.4a.5.5 0 0 1 .4.8l-6.6 8.4a.5.5 0 0 1-.88-.44L6.9 10H3.5a.5.5 0 0 1-.4-.8L9.2.9a.5.5 0 0 1 .6-.2Z',
   briefcase: 'M6 2.5A1.5 1.5 0 0 1 7.5 1h1A1.5 1.5 0 0 1 10 2.5V3h3.5A1.5 1.5 0 0 1 15 4.5v8a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 1 12.5v-8A1.5 1.5 0 0 1 2.5 3H6ZM7 3h2v-.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5Zm-4.5 1.5a.5.5 0 0 0-.5.5V7h12V5a.5.5 0 0 0-.5-.5ZM14 8.5H2v4c0 .28.22.5.5.5h11a.5.5 0 0 0 .5-.5Z',
   mail: 'M1 4.5A1.5 1.5 0 0 1 2.5 3h11A1.5 1.5 0 0 1 15 4.5v7a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 1 11.5Zm1.7-.2 5.3 4 5.3-4H2.7ZM14 5.8 8.6 9.9a1 1 0 0 1-1.2 0L2 5.8v5.7c0 .3.2.5.5.5h11c.3 0 .5-.2.5-.5Z',
+  shield: 'M8 .27l6 2.4v4.6c0 3.6-2.5 6.9-6 7.9-3.5-1-6-4.3-6-7.9v-4.6L8 .27Zm0 1.6L3.5 3.7v3.57c0 2.9 1.9 5.6 4.5 6.5 2.6-.9 4.5-3.6 4.5-6.5V3.7L8 1.87Zm2.8 3.7 1 1-4.2 4.2-2.4-2.4 1-1 1.4 1.4 3.2-3.2Z',
 };
 
 const base = import.meta.env.BASE_URL;
 
-// A grouped entry (e.g. "CMS Projects") is a container, not a project itself,
-// so it contributes its sub-projects to the tab counter rather than 1.
-const projectCount = projects.reduce((total, project) => total + (project.items?.length ?? 1), 0);
+// Monogram shown in the header instead of the avatar: "Patrick James Salamat" → PJS
+const monogram = site.name
+  .split(/\s+/)
+  .map((word) => word[0])
+  .join('')
+  .toUpperCase();
+
 
 // Every tab is its own page; the current one is derived from the URL.
 const path = Astro.url.pathname.replace(/\/$/, '');
@@ -44,6 +50,13 @@ const tabs = [
   },
   { href: `${base}stacks/`, label: 'Stacks', icon: icons.zap, current: path.endsWith('/stacks') },
   { href: `${base}experience/`, label: 'Experience', icon: icons.briefcase, current: path.endsWith('/experience') },
+  {
+    href: `${base}certifications/`,
+    label: 'Certifications',
+    icon: icons.shield,
+    count: credentials.length,
+    current: path.endsWith('/certifications'),
+  },
   { href: `${base}contact/`, label: 'Contact', icon: icons.mail, current: path.endsWith('/contact') },
 ];
 
@@ -71,7 +84,8 @@ const currentTab = tabs.find((tab) => tab.current) ?? tabs[0];
     </script>
     <ClientRouter />
   </head>
-  <body>
+  <!-- Column layout so the footer sits at the viewport bottom on short pages -->
+  <body class="flex min-h-screen flex-col">
     <!-- GitHub-style top progress bar for client-side navigation -->
     <div id="page-loader" transition:persist="page-loader" aria-hidden="true"></div>
     <header class="sticky top-0 z-10">
@@ -81,13 +95,12 @@ const currentTab = tabs.find((tab) => tab.current) ?? tabs[0];
           href={base}
           class="inline-flex min-w-0 items-center gap-2 text-sm font-semibold text-white hover:no-underline hover:opacity-80 sm:gap-3"
         >
-          <img
-            class="h-8 w-8 shrink-0 rounded-full object-cover"
-            src={`${base}${site.avatar}`}
-            alt=""
-            width="32"
-            height="32"
-          />
+          <span
+            class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white text-[12px] font-black leading-none tracking-tight text-black"
+            aria-hidden="true"
+          >
+            {monogram}
+          </span>
           <span class="truncate">{site.handle}</span>
         </a>
         <div class="flex shrink-0 items-center gap-3">
@@ -132,10 +145,10 @@ const currentTab = tabs.find((tab) => tab.current) ?? tabs[0];
         </button>
         <ul
           id="nav-menu"
-          class="hidden flex-col pb-2 sm:flex sm:flex-row sm:gap-2 sm:px-4 sm:pb-0"
+          class="hidden flex-col pb-2 sm:flex sm:flex-row sm:gap-2 sm:overflow-x-auto sm:px-4 sm:pb-0"
         >
           {tabs.map((tab) => (
-            <li>
+            <li class="sm:shrink-0">
               <a
                 href={tab.href}
                 class="flex w-full items-center gap-2 whitespace-nowrap border-transparent px-4 py-2.5 text-sm leading-[23px] text-[#e6edf3] hover:bg-white/5 hover:no-underline aria-[current=page]:font-semibold sm:w-auto sm:border-b-2 sm:px-3 sm:pb-2.5 sm:pt-2 sm:hover:border-[#30363d] sm:hover:bg-transparent sm:aria-[current=page]:border-[#f78166]"
@@ -155,14 +168,13 @@ const currentTab = tabs.find((tab) => tab.current) ?? tabs[0];
       </nav>
     </header>
 
-    <main id="overview">
+    <main id="overview" class="flex-1">
       <slot />
     </main>
 
     <footer class="mt-10 border-t border-line py-6">
-      <div class="mx-auto flex max-w-[1216px] flex-col gap-1 px-4 text-xs text-muted sm:flex-row sm:justify-between sm:gap-2">
+      <div class="mx-auto max-w-[1216px] px-4 text-center text-xs text-muted">
         <p>© {new Date().getFullYear()} {site.name}</p>
-        <p>Built with Astro + Tailwind CSS · Inspired by the GitHub profile layout</p>
       </div>
     </footer>
 

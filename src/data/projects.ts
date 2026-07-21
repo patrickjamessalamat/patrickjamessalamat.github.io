@@ -71,7 +71,7 @@ export const projects: Project[] = [
           'Led the development and re-engineering of the project’s overall architecture and implementation, establishing a more scalable, maintainable, and reusable foundation that received strong approval from the Product Owner.',
           'Built a highly configurable Umbraco CMS template with reusable components, predefined page templates, flexible content structures, and market-specific configurations aligned with individual brand guidelines. The solution enables development teams and content editors to create and manage branded websites efficiently while maintaining consistency across different markets.',
           'Utilized the CMS framework’s built-in form capabilities to simplify form creation, field configuration, validation, and lead-data mapping. Integrated these forms with the appropriate market CRM, enabling captured leads to be processed and routed according to each market’s requirements.',
-          'Deployed Projects: <a href="https://www.xpeng.com/finland" target="_blank" rel="noopener noreferrer">Xpeng Finland</a> | <a href="https://www.bydauto.be/en/" target="_blank" rel="noopener noreferrer">BYD Belgium</a> | <a href="https://www.bydauto.lu/" target="_blank" rel="noopener noreferrer">BYD Luxembourg</a>'
+          'Deployed Projects: <a href="https://www.xpeng.com/fi" target="_blank" rel="noopener noreferrer">Xpeng Finland</a> | <a href="https://www.bydauto.be/en/" target="_blank" rel="noopener noreferrer">BYD Belgium</a> | <a href="https://www.bydauto.lu/" target="_blank" rel="noopener noreferrer">BYD Luxembourg</a>'
         ],
         demoUrl: 'https://dxp-motors-ph.dev.dxp.globalinchcapedigital.com/',
       },
@@ -181,6 +181,13 @@ export const projects: Project[] = [
     ],
     language: 'ASP.NET',
     tags: ['web forms', 'vb.net', 'html', 'css', 'bootstrap', 'javascript'],
-    demoUrl: 'https://my.unc.edu.ph/Login',   
+    demoUrl: 'https://my.unc.edu.ph/Login',
   },
 ];
+
+// Total shown by the nav tab, the Projects page header, and the Overview
+// heading. A grouped entry counts as its sub-projects, not as one container.
+export const projectCount = projects.reduce(
+  (total, project) => total + (project.items?.length ?? 1),
+  0,
+);

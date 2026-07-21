@@ -3,16 +3,16 @@ import { site } from '../data/site';
 ---
 
 <section id="about">
-  <div class="box">
+  <div class="box box-interactive">
     <div class="box-header">
-      <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+      <svg class="shrink-0" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
         <path d="M4 1.5h8A1.5 1.5 0 0 1 13.5 3v10A1.5 1.5 0 0 1 12 14.5H4A1.5 1.5 0 0 1 2.5 13V3A1.5 1.5 0 0 1 4 1.5Zm0 1a.5.5 0 0 0-.5.5v10c0 .3.2.5.5.5h8a.5.5 0 0 0 .5-.5V3a.5.5 0 0 0-.5-.5Zm1 2.5h6v1H5Zm0 2.5h6v1H5Zm0 2.5h4v1H5Z"/>
       </svg>
-      {site.handle} / README.md
+      <span class="truncate">{site.handle} / README.md</span>
     </div>
-    <div class="box-body grid gap-3 text-base">
-      <h2 class="border-b border-line-muted pb-2 text-2xl font-semibold">Hi there 👋</h2>
-      {site.bio.map((paragraph) => <p>{paragraph}</p>)}
+    <div class="box-body grid gap-3 text-sm sm:text-base">
+      <h2 class="border-b border-line-muted pb-2 text-xl font-semibold sm:text-2xl">Hi there 👋</h2>
+      {site.bio.map((paragraph) => <p class="break-words">{paragraph}</p>)}
     </div>
   </div>
 </section>

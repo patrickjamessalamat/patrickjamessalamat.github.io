@@ -1,0 +1,147 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { credentials } from '../data/certifications';
+import { site } from '../data/site';
+
+const base = import.meta.env.BASE_URL;
+
+const certifications = credentials.filter((entry) => entry.kind === 'certification');
+const trainings = credentials.filter((entry) => entry.kind === 'training');
+
+const sections = [
+  { title: 'certifications', entries: certifications },
+  { title: 'trainings', entries: trainings },
+].filter((section) => section.entries.length > 0);
+
+// Stand-in for the issuer logo LinkedIn shows: up to two initials in a tile.
+const initials = (text: string) =>
+  text
+    .split(/\s+/)
+    .filter((word) => /^[A-Za-z]/.test(word))
+    .slice(0, 2)
+    .map((word) => word[0].toUpperCase())
+    .join('');
+
+const skillsIcon = 'M8 1.5 14.5 8 8 14.5 1.5 8 8 1.5Zm0 1.42L2.92 8 8 13.08 13.08 8 8 2.92Z';
+const linkIcon =
+  'M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .14.11.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.78 2.78 2 3.75 2Zm5.5 0h4a.75.75 0 0 1 .75.75v4a.75.75 0 0 1-1.5 0V4.56L7.6 9.7a.75.75 0 0 1-1.06-1.06l5.14-5.14H9.25a.75.75 0 0 1 0-1.5Z';
+---
+
+<BaseLayout
+  title={`Trainings & Certifications · ${site.name}`}
+  description={`Trainings and certifications completed by ${site.name}.`}
+>
+  <div class="mx-auto max-w-[1012px] px-4 py-8">
+    <div class="flex flex-wrap items-baseline justify-between gap-2 border-b border-line pb-4">
+      <div>
+        <h1 class="text-xl font-semibold">Trainings &amp; Certifications</h1>
+        <p class="mt-1 text-sm text-muted">Credentials, courses, and programs I’ve completed.</p>
+      </div>
+      <p class="text-sm text-muted">
+        <span class="font-semibold text-fg">{certifications.length}</span> certifications ·
+        <span class="font-semibold text-fg">{trainings.length}</span> trainings
+      </p>
+    </div>
+
+    {sections.map((section) => (
+      <section class="mt-8">
+        <h2 class="mb-4 font-mono text-sm text-muted">{section.title}.md</h2>
+        <div class="box box-interactive">
+          <ul class="box-body grid">
+            {section.entries.map((entry) => (
+              <li class="flex gap-4 border-b border-line-muted py-5 first:pt-0 last:border-0 last:pb-0">
+                {/* Issuer logo placeholder — swap for an <img> once you have the marks */}
+                <div
+                  class="grid h-12 w-12 shrink-0 place-items-center rounded-md border border-line bg-canvas-subtle text-xs font-semibold text-muted"
+                  aria-hidden="true"
+                >
+                  {initials(entry.issuer ?? entry.name)}
+                </div>
+
+                <div class="grid min-w-0 gap-1">
+                  <h3 class="font-semibold leading-snug">{entry.name}</h3>
+                  {entry.issuer && <p class="text-sm">{entry.issuer}</p>}
+
+                  {entry.courses && entry.courses.length > 0 && (
+                    <ul class="grid gap-0.5 text-sm italic text-muted">
+                      {entry.courses.map((course) => (
+                        <li>{course}</li>
+                      ))}
+                    </ul>
+                  )}
+
+                  {entry.location && <p class="text-sm text-muted">{entry.location}</p>}
+
+                  <p class="text-sm text-muted">
+                    Issued {entry.issued}{entry.expires && ` · Expired ${entry.expires}`}
+                  </p>
+
+                  {entry.credentialId && (
+                    <p class="text-sm text-muted">Credential ID {entry.credentialId}</p>
+                  )}
+
+                  {entry.url && (
+                    <a
+                      class="btn mt-2 justify-self-start text-sm"
+                      href={entry.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Show credential
+                      <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+                        <path d={linkIcon} />
+                      </svg>
+                    </a>
+                  )}
+
+                  {entry.skills && entry.skills.length > 0 && (
+                    <p class="mt-2 flex items-center gap-2 text-sm font-medium">
+                      <svg class="shrink-0 fill-muted" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+                        <path d={skillsIcon} />
+                      </svg>
+                      {entry.skills.join(' and ')}
+                    </p>
+                  )}
+
+                  {entry.certificate && (
+                    entry.certificate.src ? (
+                      /* Thumbnail and caption open the full-size certificate in a new tab */
+                      <a
+                        class="group mt-2 flex w-fit items-center gap-3 hover:no-underline"
+                        href={`${base}${entry.certificate.src}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <img
+                          class="h-16 w-24 shrink-0 rounded-md border border-line object-cover transition-opacity group-hover:opacity-80"
+                          src={`${base}${entry.certificate.src}`}
+                          alt={entry.certificate.label}
+                          width="96"
+                          height="64"
+                          loading="lazy"
+                        />
+                        <span class="text-sm font-medium underline-offset-2 group-hover:underline">
+                          {entry.certificate.label}
+                        </span>
+                      </a>
+                    ) : (
+                      <div class="mt-2 flex items-center gap-3">
+                        <div
+                          class="grid h-16 w-24 shrink-0 place-items-center rounded-md border border-dashed border-line bg-canvas-subtle text-[10px] text-muted"
+                          aria-hidden="true"
+                        >
+                          Certificate
+                        </div>
+                        <span class="text-sm font-medium">{entry.certificate.label}</span>
+                      </div>
+                    )
+                  )}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    ))}
+  </div>
+</BaseLayout>

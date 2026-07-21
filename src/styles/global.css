@@ -155,6 +155,31 @@
     @apply rounded-md border border-line bg-canvas;
   }
 
+  /* Lift + accent ring on hover, using the same tokens as the focus states.
+     Pair with .box on cards that should feel interactive. */
+  .box-interactive {
+    transition:
+      transform 200ms ease,
+      border-color 200ms ease,
+      box-shadow 200ms ease;
+  }
+
+  .box-interactive:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent-default);
+    box-shadow: 0 0 0 3px var(--accent-subtle);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .box-interactive {
+      transition: border-color 200ms ease, box-shadow 200ms ease;
+    }
+
+    .box-interactive:hover {
+      transform: none;
+    }
+  }
+
   .box-header {
     @apply flex items-center gap-2 rounded-t-md border-b border-line bg-canvas-subtle px-4 py-2 font-mono text-xs text-muted;
   }
@@ -188,5 +213,30 @@
 
   .section-heading {
     @apply mb-4 text-base font-semibold;
+  }
+
+  /* Slim scrollbar for horizontally scrolling panels. Colors come from the
+     theme tokens, so it flips with light/dark like everything else. */
+  .scroll-slim {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-default) transparent;
+  }
+
+  .scroll-slim::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+  }
+
+  .scroll-slim::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scroll-slim::-webkit-scrollbar-thumb {
+    background: var(--border-default);
+    border-radius: 999px;
+  }
+
+  .scroll-slim::-webkit-scrollbar-thumb:hover {
+    background: var(--fg-muted);
   }
 }

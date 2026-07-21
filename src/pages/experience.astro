@@ -25,7 +25,7 @@ const sections = [
         <h2 class="mb-4 font-mono text-sm text-muted">{section.title}.md</h2>
         <ol class="grid gap-4">
           {section.entries.map((entry) => (
-            <li class="box">
+            <li class="box box-interactive">
               <div class="box-body">
                 {entry.roles.length === 1 ? (
                   <Role role={entry.roles[0]} organization={entry.organization} location={entry.location} />

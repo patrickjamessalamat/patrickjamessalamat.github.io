@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { languageColors, projects } from '../data/projects';
+import { languageColors, projectCount, projects } from '../data/projects';
 import { site } from '../data/site';
 
 const languages = [...new Set(projects.map((project) => project.language))].sort();
@@ -29,8 +29,19 @@ const rows = projects.map((project) => ({
   description={`All projects by ${site.name}.`}
 >
   <div class="mx-auto max-w-[1012px] px-4 py-6">
+    <div class="flex flex-wrap items-baseline justify-between gap-2 border-b border-line pb-4">
+      <div>
+        <h1 class="text-xl font-semibold">Projects</h1>
+        <p class="mt-1 text-sm text-muted">Things I’ve built at work and on my own.</p>
+      </div>
+      <p class="text-sm text-muted">
+        <span class="font-semibold text-fg">{projectCount}</span> projects ·
+        <span class="font-semibold text-fg">{languages.length}</span> languages
+      </p>
+    </div>
+
     <!-- Filter bar, like GitHub's Repositories tab -->
-    <div class="flex flex-wrap gap-2 border-b border-line pb-4">
+    <div class="mt-4 flex flex-wrap gap-2 border-b border-line pb-4">
       <input
         id="project-search"
         type="search"

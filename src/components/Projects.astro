@@ -11,7 +11,8 @@ const pinned = projects.filter((project) => project.pinned);
     <h2 class="text-base font-semibold">Pinned</h2>
     <a class="text-xs" href={`${base}projects/`}>View all projects →</a>
   </div>
-  <div class="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-4">
+  {/* min(280px,100%) so the track can shrink below 280px on narrow phones */}
+  <div class="grid grid-cols-[repeat(auto-fill,minmax(min(280px,100%),1fr))] gap-4">
     {pinned.map((project) => <ProjectCard project={project} />)}
   </div>
 </section>
