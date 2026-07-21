@@ -10,15 +10,16 @@ export const site = {
   ],
   careerStart: '2017-06', // first developer role; drives the years-of-experience count
   email: 'patrickjamessalamat11@gmail.com',
-  phone: '+63 917 379 6778', // spaces are stripped for the tel: link
+  phone: '+63 917 379 6778',
   location: 'Philippines',  
   socials: [
     // { label: 'GitHub', url: 'https://github.com/patrickjamessalamat' },
     { label: 'LinkedIn', url: 'https://www.linkedin.com/in/patrick-james-salamat/' },  
   ],
   // Google Analytics 4 measurement ID, e.g. 'G-XXXXXXXXXX'.
-  // Leave empty to ship no analytics at all (local dev, forks).
   analyticsId: 'G-WDT4M7Y2G1',
+  // Google Search Console "HTML tag" verification token — the `content` value
+  googleSiteVerification: 'q2hP-7uDQAoc9bfq7cu7V9pNxM5Pn_CRwJsGHEoH_DE',
   resumeFile: 'resume.pdf', // lives in public/
   avatar: 'images/profile.png',
 };

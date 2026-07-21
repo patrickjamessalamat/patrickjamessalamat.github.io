@@ -99,6 +99,9 @@ const personSchema = {
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="author" content={site.name} />
+    {site.googleSiteVerification && (
+      <meta name="google-site-verification" content={site.googleSiteVerification} />
+    )}
     <meta name="robots" content={isDeployed ? 'index, follow' : 'noindex, nofollow'} />
 
     <meta property="og:title" content={title} />
