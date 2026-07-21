@@ -16,6 +16,9 @@ export const site = {
     // { label: 'GitHub', url: 'https://github.com/patrickjamessalamat' },
     { label: 'LinkedIn', url: 'https://www.linkedin.com/in/patrick-james-salamat/' },  
   ],
+  // Google Analytics 4 measurement ID, e.g. 'G-XXXXXXXXXX'.
+  // Leave empty to ship no analytics at all (local dev, forks).
+  analyticsId: 'G-WDT4M7Y2G1',
   resumeFile: 'resume.pdf', // lives in public/
   avatar: 'images/profile.png',
 };

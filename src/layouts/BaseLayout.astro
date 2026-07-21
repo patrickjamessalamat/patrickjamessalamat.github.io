@@ -61,6 +61,34 @@ const tabs = [
 ];
 
 const currentTab = tabs.find((tab) => tab.current) ?? tabs[0];
+
+// Only the build that runs in GitHub Actions is a real deployment. `astro dev`
+// and a local `astro build` both stay out of Google Analytics and out of search
+// results — PROD alone is not enough, since a local build sets it too.
+const isDeployed = import.meta.env.PROD && process.env.GITHUB_ACTIONS === 'true';
+const analyticsId = isDeployed ? site.analyticsId : '';
+
+// Absolute URLs — crawlers and social scrapers reject relative ones.
+const canonical = Astro.site
+  ? new URL(Astro.url.pathname, Astro.site).href
+  : Astro.url.pathname;
+const ogImage = Astro.site
+  ? new URL(`${base}${site.avatar}`, Astro.site).href
+  : `${base}${site.avatar}`;
+
+// Structured data so search engines can render a knowledge-panel style result.
+const personSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: site.name,
+  url: Astro.site?.href ?? canonical,
+  image: ogImage,
+  jobTitle: site.role,
+  email: `mailto:${site.email}`,
+  telephone: site.phone,
+  address: { '@type': 'PostalAddress', addressCountry: site.location },
+  sameAs: site.socials.map((social) => social.url),
+};
 ---
 
 <!doctype html>
@@ -70,11 +98,27 @@ const currentTab = tabs.find((tab) => tab.current) ?? tabs[0];
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="author" content={site.name} />
+    <meta name="robots" content={isDeployed ? 'index, follow' : 'noindex, nofollow'} />
+
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:alt" content={`Photo of ${site.name}`} />
+    <meta property="og:locale" content="en_US" />
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
     <link rel="icon" type="image/png" href={`${base}favicon.png`} />
-    <link rel="canonical" href={Astro.site ? new URL(Astro.url.pathname, Astro.site).href : Astro.url.pathname} />
+    <link rel="canonical" href={canonical} />
+    <link rel="sitemap" type="application/xml" href={`${base}sitemap-index.xml`} />
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(personSchema)} />
     <script is:inline>
       // Apply the stored theme before first paint to avoid a flash
       const storedTheme = localStorage.getItem('theme');
@@ -82,6 +126,47 @@ const currentTab = tabs.find((tab) => tab.current) ?? tabs[0];
         document.documentElement.dataset.theme = storedTheme;
       }
     </script>
+    {analyticsId && (
+      <>
+        <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${analyticsId}`}></script>
+        <script is:inline define:vars={{ gaId: analyticsId }}>
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+
+          // The ClientRouter navigates without a full reload, so GA's automatic
+          // page_view would only ever fire once. Disable it and send our own on
+          // astro:page-load, which also covers the very first load.
+          gtag('config', gaId, { send_page_view: false });
+
+          if (!window.__gaInit) {
+            window.__gaInit = true;
+
+            document.addEventListener('astro:page-load', () => {
+              gtag('event', 'page_view', {
+                page_title: document.title,
+                page_location: location.href,
+                page_path: location.pathname,
+              });
+            });
+
+            // Any <a data-analytics="event_name"> reports a custom event.
+            // Delegated from document so it survives client-side navigation.
+            document.addEventListener('click', (event) => {
+              const link = event.target.closest('a[data-analytics]');
+              if (!link) return;
+              gtag('event', link.dataset.analytics, {
+                link_text: link.textContent.trim(),
+                link_url: link.href,
+                page_path: location.pathname,
+              });
+            });
+          }
+        </script>
+      </>
+    )}
     <ClientRouter />
   </head>
   <!-- Column layout so the footer sits at the viewport bottom on short pages -->
