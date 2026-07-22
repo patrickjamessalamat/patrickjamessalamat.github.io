@@ -55,14 +55,14 @@ export const projects: Project[] = [
     ],
     language: 'React',
     tags: ['c#', 'ms sql', 'postgresql', 'ef core', 'react', 'typescript', 'rest api', 'saas', 'docker', 'azure', 'aks'],
-    demoUrl: '#',
+    demoUrl: 'https://az-weu-glo-app-dev-dpm-01.azurewebsites.net/',
   },
   {
     title: 'CMS Projects',
     description: [
-      'A collection of CMS websites developed for automotive brands across different markets. These projects were built using a reusable, component-based architecture and a highly configurable Umbraco CMS template that enables development teams and content editors to create and manage branded websites efficiently while maintaining consistency across different markets.',
+      'Twelve production websites for ten global automotive brands across seven markets in Europe, Asia-Pacific, and Australasia — Mercedes-Benz, Lexus, BYD, Xpeng, Maxus, LDV, KGM, Deepal, Foton, and IM Used Cars. All built on a shared, highly configurable Umbraco CMS template that lets development teams and content editors launch and manage branded sites independently while keeping consistency across markets.',
     ],
-    demoUrl: '#',
+    demoUrl: '/projects',
     visibility: 'Web',
     items: [
       {
@@ -78,7 +78,7 @@ export const projects: Project[] = [
       {
         name: 'Mercedes Benz Indonesia',
         description: [
-          'Led the development of the project and introduced a new implementation that was later incorporated as a feature of CMS Global Template 1.3. Engineered a lead-notification service with customizable email templates and integrated it with the company’s in-house Salesforce CRM.',
+          'Led delivery of the Indonesian market site and engineered a lead-notification service with customizable email templates, integrated with the company’s in-house Salesforce CRM. The implementation was adopted into CMS Global Template 1.3 as a standard platform feature, making it available to every market that followed.',
         ],
         demoUrl: 'https://www.mercedes-benz.co.id/en/',
       },
