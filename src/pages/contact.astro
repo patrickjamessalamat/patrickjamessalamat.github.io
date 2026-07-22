@@ -58,7 +58,12 @@ const details = [
 
         <div class="flex flex-wrap gap-2 border-t border-line-muted pt-5">
           <a class="btn btn-primary" href={`mailto:${site.email}`}>Email me</a>
-          <a class="btn" href={`${base}${site.resumeFile}`} download data-analytics="resume_download">
+          <a
+            class="btn"
+            href={`${base}${site.resumeFile}`}
+            download={`${site.name}.pdf`}
+            data-analytics="resume_download"
+          >
             Download resume
           </a>
           {site.socials.map((social) => (
