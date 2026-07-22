@@ -13,7 +13,7 @@ export const site = {
   phone: '+63 917 379 6778',
   location: 'Philippines',  
   socials: [
-    // { label: 'GitHub', url: 'https://github.com/patrickjamessalamat' },
+    { label: 'GitHub', url: 'https://github.com/patrickjamessalamat' },
     { label: 'LinkedIn', url: 'https://www.linkedin.com/in/patrick-james-salamat/' },  
   ],
   // Google Analytics 4 measurement ID, e.g. 'G-XXXXXXXXXX'.

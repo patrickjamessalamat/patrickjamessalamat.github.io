@@ -15,16 +15,23 @@ const fallback = { changefreq: 'monthly', priority: '0.5' };
 
 // Every page is a static .astro file, so the route list comes straight off the
 // filesystem — a new page reaches the sitemap without anyone editing it here.
+// Routes that exist as pages but must never be advertised to crawlers.
+const excluded = new Set(['/404/']);
+
 const files = Object.keys(import.meta.glob('./**/*.astro'));
 
 export const GET: APIRoute = ({ site }) => {
   const base = import.meta.env.BASE_URL;
+  // Build date, in the W3C date format sitemaps require. Every page is static,
+  // so a deploy is the only thing that can change any of them.
+  const lastmod = new Date().toISOString().slice(0, 10);
 
   const urls = files
     .map((file) => file.replace(/^\.\//, '').replace(/\.astro$/, ''))
     // Astro builds directory-style URLs, so every page but the index gets a
     // trailing slash — the sitemap has to match or Google sees a redirect.
     .map((route) => (route === 'index' ? '/' : `/${route}/`))
+    .filter((route) => !excluded.has(route))
     .sort()
     .map((route) => {
       const { changefreq, priority } = hints[route] ?? fallback;
@@ -32,6 +39,7 @@ export const GET: APIRoute = ({ site }) => {
       return [
         '  <url>',
         `    <loc>${loc}</loc>`,
+        `    <lastmod>${lastmod}</lastmod>`,
         `    <changefreq>${changefreq}</changefreq>`,
         `    <priority>${priority}</priority>`,
         '  </url>',
