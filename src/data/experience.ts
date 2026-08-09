@@ -29,7 +29,7 @@ export const experience: ExperienceEntry[] = [
       {
         title: 'Senior Full-Stack .NET Engineer',
         employmentType: 'Full-time',
-        period: 'Jan 2024 — Present',
+        period: 'Jan 2024 — Apr 2026',
         description: [
           'Lead the development of a new Umbraco CMS template designed to be fully customizable and configurable for different automotive markets. Also serve as the Lead Backend Engineer for a SaaS deployment platform that streamlines the delivery and management of newly developed CMS websites.',
           'Guide and mentor junior engineers in developing CMS websites for globally recognized automotive brands. Promote a strong engineering culture by encouraging the team to follow the Software Development Life Cycle (SDLC), apply proven software design principles, maintain high coding standards, and participate in peer code reviews.',
