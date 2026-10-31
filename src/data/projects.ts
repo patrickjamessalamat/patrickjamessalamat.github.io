@@ -21,7 +21,8 @@ export interface Project {
   demoUrl?: string;
   repoUrl?: string;
   pinned?: boolean; // pinned projects also appear on the Overview page
-  visibility?: 'Web' | 'Desktop'; // repo visibility badge; defaults to Public
+  visibility?: 'Web' | 'Desktop' | 'Mobile'; // repo visibility badge; defaults to Public
+  icon?: string; // optional app icon beside the title, relative to /public
 }
 
 // GitHub's language colors, shared by the pinned cards and the Projects page
@@ -46,6 +47,20 @@ export const languageColors: Record<string, string> = {
 
 // TODO: replace with your real projects
 export const projects: Project[] = [
+  {
+    title: 'Daloy',
+    visibility: 'Mobile',
+    icon: 'images/projects/daloy.png',
+    description: [
+      'A personal project: an offline cash-in / cash-out logbook for sari-sari stores, GCash and Maya outlets, and bank counters. Now in Google Play closed testing.',
+      'Scan or share a receipt and Daloy fills in the amount, reference number, date, and wallet, reading GCash, Maya, bank, digital-bank, and remittance slips on the device. Before cash is handed over, it checks the reference number against earlier entries and warns about a likely duplicate cash-out.',
+      'Records stay on the phone: no account, a PIN or fingerprint lock, per-wallet balances and daily earnings, a custom rate card, and backup and restore to a new phone. A 30-day trial, then a one-time Google Play purchase.',
+    ],
+    language: 'React',
+    tags: ['react native', 'expo', 'sqlite', 'ocr', 'android', 'offline-first', 'google play', 'astro', 'personal project'],
+    demoUrl: 'https://daloy-ph.web.app',
+    pinned: true,
+  },
   {
     title: 'DXP+ Control Panel',
     visibility: 'Web',

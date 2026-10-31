@@ -22,6 +22,41 @@ export interface ExperienceEntry {
 
 export const experience: ExperienceEntry[] = [
   {
+    organization: 'Self-employed',
+    location: 'Philippines',
+    kind: 'work',
+    roles: [
+      {
+        title: 'Freelance Software Engineer',
+        employmentType: 'Freelance',
+        period: 'Apr 2026 — Present',
+        workMode: 'Remote',
+        description: [
+          'Deliver software development services to clients, taking web, mobile, and backend work from requirements and design through development, deployment, and ongoing support.',
+          'Building Daloy, an offline-first Android logbook for cash-in / cash-out outlets, with React Native (Expo) and SQLite. It reads GCash, Maya, bank, digital-bank and remittance receipts on the device to fill in each transaction, warns before a duplicate cash-out is saved, and supports backup and restore. Now in Google Play closed testing.',
+          'Own the product end to end: a 30-day trial with a one-time Google Play purchase, the Play Store listing and assets, and an Astro marketing site at daloy-ph.web.app.',
+          'Building Peddy, a road-safety pedestrian-crossing alert app, with a React Native mobile client, an ASP.NET Core API, and a web admin.',
+          'Work AI-first: orchestrate AI coding agents for implementation, code review, and testing, while keeping architecture, review, and release decisions in my own hands.',
+        ],
+        skills: [
+          'React Native',
+          'Expo',
+          'SQLite',
+          'On-device OCR',
+          'Android',
+          'Google Play',
+          'Astro',
+          'ASP.NET Core',
+          'C#',
+          'REST API',
+          'AI Agents',
+          'Claude Code',
+          'Codex',
+        ],
+      },
+    ],
+  },
+  {
     organization: 'Inchcape Digital',
     location: 'Ortigas Center, Pasig, Metro Manila',
     kind: 'work',
