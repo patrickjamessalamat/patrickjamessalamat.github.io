@@ -67,6 +67,7 @@ const rows = projects.map((project) => ({
           data-lang={project.language}
         >
           <div class="flex flex-wrap items-center gap-2">
+            {project.icon && <img src={`${import.meta.env.BASE_URL}${project.icon}`} alt="" width="20" height="20" class="h-5 w-5 shrink-0 rounded" />}
             <h2 class="text-xl font-semibold">
               {project.repoUrl || project.demoUrl ? (
                 <a href={project.repoUrl ?? project.demoUrl} target="_blank" rel="noopener noreferrer">
